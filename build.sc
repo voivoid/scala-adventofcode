@@ -104,6 +104,10 @@ object app extends ScalaModule with ScalafmtModule {
     // 2017
     check(runProblem("2017_01_1")(), "1034")
     check(runProblem("2017_01_2")(), "1356")
+
+    // 2018
+    check(runProblem("2018_01_1")(), "411")
+    check(runProblem("2018_01_2")(), "56360")
   }
 }
 

@@ -22,7 +22,7 @@ object problem01 extends baseProblem {
           )
       }
 
-    val path =
+    val pathHistory =
       stepByStepInstructions.scanLeft((Set.empty[Location], startState)) {
         case ((visited, currentState), instruction) => {
           val nextState = runInstruction(currentState, instruction)
@@ -30,7 +30,7 @@ object problem01 extends baseProblem {
         }
       }
 
-    val (_, firstIntersection) = path
+    val (_, firstIntersection) = pathHistory
       .find { case (visited, state) => visited(state.location) }
       .getOrElse(sys.error("Solution not found"))
     distance(startState.location, firstIntersection.location)
