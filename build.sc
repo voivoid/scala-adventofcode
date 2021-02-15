@@ -1,10 +1,10 @@
-import mill._, scalalib._
+import mill._, scalalib._, scalafmt._
 
-object problems extends ScalaModule {
+object problems extends ScalaModule with ScalafmtModule {
   override def scalaVersion = "2.13.4"
   override def ivyDeps = Agg(ivy"org.parboiled::parboiled:2.2.1")
 
-  object test extends Tests {
+  object test extends Tests with ScalafmtModule {
     override def scalaVersion = problems.scalaVersion
     override def moduleDeps = Seq(problems)
     override def ivyDeps = Agg(ivy"com.lihaoyi::utest:0.7.7")
@@ -12,7 +12,7 @@ object problems extends ScalaModule {
   }
 }
 
-object app extends ScalaModule {
+object app extends ScalaModule with ScalafmtModule {
   override def scalaVersion = problems.scalaVersion
   override def moduleDeps = Seq(problems)
   override def ivyDeps = Agg(ivy"org.scala-lang:scala-reflect:${ scalaVersion() }")
