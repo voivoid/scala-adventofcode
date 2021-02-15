@@ -3,8 +3,8 @@ package year2015
 
 object problem01 extends baseProblem {
 
-  def solve1(input: Input): Int = getShifts(input).sum
-  def solve2(input: Input): Int =
+  override def solve1(input: Input): Int = getShifts(input).sum
+  override def solve2(input: Input): Int =
     getShifts(input).scanLeft(0)(_ + _).indexOf(-1)
 
   private def getShifts(input: Input) = input.filter(!_.isWhitespace).map(shift)
