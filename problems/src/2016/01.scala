@@ -64,24 +64,15 @@ object problem01 extends baseProblem {
   private def parseInstructions(input: String): Seq[Instruction] = {
     import fastparse._
     import SingleLineWhitespace._
+    import adventOfCode.utils.parse.{num, parseValue}
 
     def turn[_: P] = P("L").map(_ => Turn.Left) | P("R").map(_ => Turn.Right)
 
-    def num[_: P] = P(CharIn("0-9").rep(1).!.map(_.toInt))
-
-    def instr[_: P] = P(turn ~ num).map { case (t, d) =>
-      Instruction(t, d)
-    }
+    def instr[_: P] = P(turn ~ num).map { Instruction tupled _ }
 
     def parser[_: P] = instr.rep(sep = ",")
 
-    val parsed = parse(input.mkString, parser(_))
-
-    parsed match {
-      case Parsed.Success(result, parsed) =>
-        assert(parsed == input.size); result
-      case err => sys.error(err.toString)
-    }
+    parseValue(input.mkString, parser(_))
   }
 
   private def distance(from: Location, to: Location) = {

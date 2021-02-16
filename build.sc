@@ -47,9 +47,7 @@ object problems extends ScalaModule with ScalafmtModule {
 
   object test extends Tests with ScalafmtModule {
     override def scalaVersion = problems.scalaVersion
-
     override def moduleDeps = Seq(problems)
-
     override def testFrameworks = Seq("utest.runner.Framework")
   }
 
@@ -57,12 +55,10 @@ object problems extends ScalaModule with ScalafmtModule {
 
 object app extends ScalaModule with ScalafmtModule {
   override def scalaVersion = problems.scalaVersion
-
   override def moduleDeps = Seq(problems)
-
   override def ivyDeps = Agg(ivy"org.scala-lang:scala-reflect:${scalaVersion()}")
 
-  def runProblem(input: String) = T.task {
+  private def runProblem(input: String) = T.task {
     val Array(year, problem, part) = input.split('_')
 
     val appAssembly = app.assembly().path
@@ -74,52 +70,67 @@ object app extends ScalaModule with ScalafmtModule {
     val inputFile = s"${year}_${problem}"
     val result = os.proc("java", "-jar", appAssembly, problemId, testInputsPath / inputFile).call()
 
-    (problemId, result.out.chunks.mkString)
+    (T.ctx.log, problemId, result.out.chunks.mkString)
   }
 
   def problem(input: String) = T.command {
-    val (_, output) = runProblem(input)()
+    val (_, _, output) = runProblem(input)()
     T.log.info(output)
   }
 
-  def testAll() = T.command {
-    def check(result: (String, String), expected: String): Unit = {
-      val (problemId, output) = result
-      if (output.trim == expected) {
-        T.log.info(s"${problemId} OK")
-      }
-      else {
-        T.log.error(s"${problemId} FAILED; expected ${expected}; got ${output}")
-      }
+  private def check(result: (mill.api.Logger, String, String), expected: String): Unit = {
+    val (logger, problemId, output) = result
+    if (output.trim == expected) {
+      logger.info(s"${problemId} OK")
     }
+    else {
+      logger.error(s"${problemId} FAILED; expected ${expected}; got ${output}")
+    }
+  }
 
-    // 2015
+  def test2015() = T.command {
     check(runProblem("2015_01_1")(), "280")
     check(runProblem("2015_01_2")(), "1797")
+  }
 
-    // 2016
+  def test2016() = T.command {
     check(runProblem("2016_01_1")(), "273")
     check(runProblem("2016_01_2")(), "115")
+  }
 
-    // 2017
+  def test2017() = T.command {
     check(runProblem("2017_01_1")(), "1034")
     check(runProblem("2017_01_2")(), "1356")
+  }
 
-    // 2018
+  def test2018() = T.command {
     check(runProblem("2018_01_1")(), "411")
     check(runProblem("2018_01_2")(), "56360")
+  }
 
-    // 2019
+  def test2019() = T.command {
     check(runProblem("2019_01_1")(), "3231195")
     check(runProblem("2019_01_2")(), "4843929")
 
-    // 2020
+    check(runProblem("2019_02_1")(), "5866663")
+    check(runProblem("2019_02_2")(), "4259")
+  }
+
+  def test2020() = T.command {
     check(runProblem("2020_01_1")(), "744475")
     check(runProblem("2020_01_2")(), "70276940")
 
     check(runProblem("2020_02_1")(), "460")
     check(runProblem("2020_02_2")(), "251")
+  }
 
+  def testAll() = T.command {
+    test2015()()
+    test2016()()
+    test2017()()
+    test2018()()
+    test2019()()
+    test2020()()
   }
 }
 

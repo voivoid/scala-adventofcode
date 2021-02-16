@@ -4,11 +4,14 @@ package year2017
 object problem01 extends baseProblem {
 
   override def solve1(input: Input): Int = {
+    import adventOfCode.utils.algorithms.SlidingTuple
+
     val (inputLen, cycledStr) = readInput(input)
 
     val pairs =
-      cycledStr.take(inputLen + 1).sliding(2)
-    sumPairs(pairs.map { case Seq(a, b) =>
+      cycledStr.take(inputLen + 1).sliding2
+
+    sumPairs(pairs.map { case (a, b) =>
       (a, b)
     })
   }

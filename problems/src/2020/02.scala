@@ -34,24 +34,15 @@ object problem02 extends baseProblem {
   private def parseEntry(entryStr: String): Entry = {
     import fastparse._
     import SingleLineWhitespace._
-
-    def num[_: P] = P(CharIn("0-9").rep(1).!.map(_.toInt))
-
-    def letter[_: P] = CharIn("a-zA-Z").!.map(_.head)
+    import adventOfCode.utils.parse.{num, alpha, parseValue}
 
     def occurances[_: P] = num ~ "-" ~ num
 
     def password[_: P] = P(CharIn("a-zA-Z")).rep(1).!
 
-    def parser[_: P] = (occurances ~ letter ~ ":" ~ password).map(Entry tupled _)
+    def parser[_: P] = (occurances ~ alpha ~ ":" ~ password).map(Entry tupled _)
 
-    val parsed = parse(entryStr, parser(_))
-
-    parsed match {
-      case Parsed.Success(result, parsed) =>
-        assert(parsed == entryStr.size); result
-      case err => sys.error(err.toString)
-    }
+    parseValue(entryStr, parser(_))
   }
 
   def implTests(): Unit = {
