@@ -12,12 +12,20 @@ object problem01 extends baseProblem {
   }
 
   private def solve(input: Input, calcFuel: Int => Int): Int = {
-    input.getLines().map(massStr => calcFuel(massStr.toInt)).sum
+    input
+      .getLines()
+      .map(massStr => calcFuel(massStr.toInt))
+      .sum
   }
 
-  private def calcFuelSimple(mass: Int): Int = mass / 3 - 2
+  private def calcFuelSimple(mass: Int): Int =
+    mass / 3 - 2
 
   private def calcFuelTotal(mass: Int): Int = {
-    Iterator.iterate(mass)(calcFuelSimple).drop(1).takeWhile(_ > 0).sum
+    Iterator
+      .iterate(mass)(calcFuelSimple)
+      .drop(1)
+      .takeWhile(_ > 0)
+      .sum
   }
 }

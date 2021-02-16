@@ -10,15 +10,17 @@ object problem01 extends baseProblem {
 
   override def solve2(input: Input): Int = {
     val freqChanges = getFreqChanges(input).toArray
-    val freqChangesCycled = Iterator.continually(freqChanges).flatten
+    val freqChangesCycled =
+      Iterator.continually(freqChanges).flatten
 
-    val freqsHistory = freqChangesCycled.scanLeft((Set.empty[Int], 0)) {
-      case ((prevFreqs, currentFreq), change) =>
-        (prevFreqs + currentFreq, currentFreq + change)
+    val freqsHistory = freqChangesCycled.scanLeft((Set.empty[Int], 0)) { case ((prevFreqs, currentFreq), change) =>
+      (prevFreqs + currentFreq, currentFreq + change)
     }
 
     val (_, freqTwice) = freqsHistory
-      .find { case (prevFreqs, currentFreq) => prevFreqs(currentFreq) }
+      .find { case (prevFreqs, currentFreq) =>
+        prevFreqs(currentFreq)
+      }
       .getOrElse(sys.error("No solution"))
 
     freqTwice

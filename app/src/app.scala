@@ -32,9 +32,7 @@ object ProblemsApp {
           .asInstanceOf[adventOfCode.problems.baseProblem]
       } catch {
         case e: Throwable =>
-          sys.error(
-            s"Failed to load the problem ${problemStr}: ${e.getMessage}"
-          )
+          sys.error(s"Failed to load the problem ${problemStr}: ${e.getMessage}")
       }
 
     val result = problemPart match {

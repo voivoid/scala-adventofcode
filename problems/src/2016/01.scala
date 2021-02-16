@@ -18,7 +18,9 @@ object problem01 extends baseProblem {
         Iterator
           .single(Instruction(turn, 1))
           .concat(
-            Iterator.continually(Instruction(Turn.None, 1)).take(distance - 1)
+            Iterator
+              .continually(Instruction(Turn.None, 1))
+              .take(distance - 1)
           )
       }
 
@@ -31,12 +33,15 @@ object problem01 extends baseProblem {
       }
 
     val (_, firstIntersection) = pathHistory
-      .find { case (visited, state) => visited(state.location) }
+      .find { case (visited, state) =>
+        visited(state.location)
+      }
       .getOrElse(sys.error("Solution not found"))
     distance(startState.location, firstIntersection.location)
   }
 
-  private def startState = State(Dir.North, Location(0, 0))
+  private def startState =
+    State(Dir.North, Location(0, 0))
 
   private object Turn extends scala.Enumeration {
     val Left, Right, None = Value
@@ -64,7 +69,9 @@ object problem01 extends baseProblem {
 
     def num[_: P] = P(CharIn("0-9").rep(1).!.map(_.toInt))
 
-    def instr[_: P] = P(turn ~ num).map { case (t, d) => Instruction(t, d) }
+    def instr[_: P] = P(turn ~ num).map { case (t, d) =>
+      Instruction(t, d)
+    }
 
     def parser[_: P] = instr.rep(sep = ",")
 
@@ -84,23 +91,27 @@ object problem01 extends baseProblem {
   private def doTurn(currentDir: Dir, turn: Turn): Dir = {
     if (turn == Turn.None) currentDir
     else {
-      val shift = if (turn == Turn.Left) -1 else +1
+      val shift =
+        if (turn == Turn.Left) -1 else +1
       val dirs = Dir.values.size
 
       Dir((currentDir.id + shift + dirs) % dirs)
     }
   }
 
-  private def posDelta(dir: Dir, distance: Int) = dir match {
-    case Dir.North => (0, distance)
-    case Dir.East  => (distance, 0)
-    case Dir.South => (0, -distance)
-    case Dir.West  => (-distance, 0)
-  }
+  private def posDelta(dir: Dir, distance: Int) =
+    dir match {
+      case Dir.North => (0, distance)
+      case Dir.East  => (distance, 0)
+      case Dir.South => (0, -distance)
+      case Dir.West  => (-distance, 0)
+    }
 
   private def runInstruction(state: State, instruction: Instruction): State = {
-    val newDir = doTurn(state.dir, instruction.turn)
-    val (dx, dy) = posDelta(newDir, instruction.distance)
+    val newDir =
+      doTurn(state.dir, instruction.turn)
+    val (dx, dy) =
+      posDelta(newDir, instruction.distance)
 
     State(newDir, Location(state.location.x + dx, state.location.y + dy))
   }
@@ -113,8 +124,7 @@ object problem01 extends baseProblem {
     doTurn(Dir.West, Turn.Left) ==> Dir.South
     doTurn(Dir.West, Turn.Right) ==> Dir.North
 
-    assertMatch(parseInstructions("R2, L3")) {
-      case Seq(Instruction(Turn.Right, 2), Instruction(Turn.Left, 3)) =>
+    assertMatch(parseInstructions("R2, L3")) { case Seq(Instruction(Turn.Right, 2), Instruction(Turn.Left, 3)) =>
     }
   }
 }
