@@ -11,9 +11,7 @@ object problem01 extends baseProblem {
     val pairs =
       cycledStr.take(inputLen + 1).sliding2
 
-    sumPairs(pairs.map { case (a, b) =>
-      (a, b)
-    })
+    sumPairs(pairs)
   }
 
   override def solve2(input: Input): Int = {

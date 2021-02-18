@@ -106,6 +106,9 @@ object app extends ScalaModule with ScalafmtModule {
   def test2018() = T.command {
     check(runProblem("2018_01_1")(), "411")
     check(runProblem("2018_01_2")(), "56360")
+
+    check(runProblem("2018_02_1")(), "5681")
+    check(runProblem("2018_02_2")(), "uqyoeizfvmbistpkgnocjtwld")
   }
 
   def test2019() = T.command {

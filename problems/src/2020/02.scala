@@ -12,7 +12,7 @@ object problem02 extends baseProblem {
   }
 
   private def solve(input: Input, isValid: Entry => Boolean): Int = {
-    input.getLines().map(parseEntry(_)).count(isValid)
+    input.getLines().map(parseEntry).count(isValid)
   }
 
   private def isValid1(entry: Entry): Boolean = {
