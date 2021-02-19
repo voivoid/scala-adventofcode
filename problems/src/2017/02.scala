@@ -19,7 +19,7 @@ object problem02 extends baseProblem {
   }
 
   private def calcDiv(ints: Array[Int]): Int = {
-    val solutions = for{
+    val solutions = for {
       a <- ints
       b <- ints
       if a > b && a % b == 0

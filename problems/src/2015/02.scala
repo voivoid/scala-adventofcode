@@ -35,14 +35,14 @@ object problem02 extends baseProblem {
     (min, mid, max)
   }
 
-  private def calcMaterial1( dims: Dims ) : Int = {
+  private def calcMaterial1(dims: Dims): Int = {
     val (min, mid, max) = dims
     val area = 2 * min * mid + 2 * min * max + 2 * mid * max
 
     area + min * mid
   }
 
-  private def calcMaterial2( dims: Dims ) : Int = {
+  private def calcMaterial2(dims: Dims): Int = {
     val (min, mid, max) = dims
 
     min * 2 + mid * 2 + min * mid * max
