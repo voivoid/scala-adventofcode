@@ -30,7 +30,7 @@ Sources
 Day | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 |
 --- | ---- | ---- | ---- | ---- | ---- | ---- |
 01  | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2015/01.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2016/01.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2017/01.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2018/01.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2019/01.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2020/01.scala) |
-02  |      |      | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2017/02.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2018/02.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2019/02.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2020/02.scala) |
+02  |      | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2016/02.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2017/02.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2018/02.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2019/02.scala) | [✓](https://github.com/voivoid/scala_aoc_mill/blob/master/problems/src/2020/02.scala) |
 03  |      |      |      |      |      |      |
 04  |      |      |      |      |      |      |
 05  |      |      |      |      |      |      |
