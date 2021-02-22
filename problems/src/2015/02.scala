@@ -23,16 +23,12 @@ object problem02 extends baseProblem {
     import adventOfCode.utils.parse.{num, parseValue}
 
     def parser[_: P] = P(num ~ "x" ~ num ~ "x" ~ num)
-    parseValue(line.mkString, parser(_))
+    parseValue(line, parser(_))
   }
 
   private def sortDims(dims: Dims): Dims = {
-    val (l, w, h) = dims
-    val min = l min w min h
-    val max = l max w max h
-    val mid = l + w + h - min - max
-
-    (min, mid, max)
+    import adventOfCode.utils.algorithms.Tuple3Sorted
+    dims.sorted
   }
 
   private def calcMaterial1(dims: Dims): Int = {

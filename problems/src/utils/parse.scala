@@ -2,9 +2,8 @@ package adventOfCode.utils
 package object parse {
 
   import fastparse._
-  import SingleLineWhitespace._
 
-  def num[_: P] = P(CharIn("0-9").rep(1).!.map(_.toInt))
+  def num[_: P] = P(CharIn("0-9").repX(1).!.map(_.toInt))
   def alpha[_: P] = CharIn("a-zA-Z").!.map(_.head)
 
   def parseValue[Result](input: String, parser: P[_] => P[Result]): Result = {

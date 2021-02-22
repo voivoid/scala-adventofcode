@@ -72,7 +72,7 @@ object problem01 extends baseProblem {
 
     def parser[_: P] = instr.rep(sep = ",")
 
-    parseValue(input.mkString, parser(_))
+    parseValue(input, parser(_))
   }
 
   private def distance(from: Location, to: Location) = {

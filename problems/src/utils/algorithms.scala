@@ -28,4 +28,27 @@ package object algorithms {
     }
   }
 
+  implicit class Tuple3Sorted[T: Numeric](t: Tuple3[T, T, T]) {
+    def sorted: (T, T, T) = {
+      val numeric = implicitly[Numeric[T]]
+
+      val min = numeric.min[T] _
+      val max = numeric.max[T] _
+      val plus = numeric.plus _
+      val minus = numeric.minus _
+
+      val (a, b, c) = t
+
+      val minV = min(min(a, b), c)
+      val maxV = max(max(a, b), c)
+
+      val abc = plus(plus(a, b), c)
+      val minmax = plus(minV, maxV)
+
+      val midV = minus(abc, minmax)
+
+      (minV, midV, maxV)
+    }
+  }
+
 }
