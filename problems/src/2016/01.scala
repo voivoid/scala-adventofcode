@@ -13,19 +13,10 @@ object problem01 extends baseProblem {
   override def solve2(input: Input): Int = {
     val instructions = parseInstructions(input.mkString)
 
-    val stepByStepInstructions =
-      instructions.iterator.flatMap { case Instruction(turn, distance) =>
-        Iterator
-          .single(Instruction(turn, 1))
-          .concat(
-            Iterator
-              .continually(Instruction(Turn.None, 1))
-              .take(distance - 1)
-          )
-      }
+    val oneStepAtATimeInstructions = instructions.iterator.flatMap(makeOneStepAtATimeInstructions)
 
     val pathHistory =
-      stepByStepInstructions.scanLeft((Set.empty[Location], startState)) {
+      oneStepAtATimeInstructions.scanLeft((Set.empty[Location], startState)) {
         case ((visited, currentState), instruction) => {
           val nextState = runInstruction(currentState, instruction)
           (visited + currentState.location, nextState)
@@ -37,6 +28,7 @@ object problem01 extends baseProblem {
         visited(state.location)
       }
       .getOrElse(sys.error("Solution not found"))
+
     distance(startState.location, firstIntersection.location)
   }
 
@@ -105,6 +97,11 @@ object problem01 extends baseProblem {
       posDelta(newDir, instruction.distance)
 
     State(newDir, Location(state.location.x + dx, state.location.y + dy))
+  }
+
+  private def makeOneStepAtATimeInstructions(instruction: Instruction): Iterator[Instruction] = {
+    Iterator.single(Instruction(instruction.turn, 1)) ++
+      Iterator.continually(Instruction(Turn.None, 1)).take(instruction.distance - 1)
   }
 
   def implTests(): Unit = {

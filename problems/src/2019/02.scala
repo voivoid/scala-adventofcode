@@ -25,7 +25,10 @@ object problem02 extends baseProblem {
 
   private case class State(codes: Codes, instructionPointer: Int)
 
-  private def parseCodes(input: Input): Codes = input.mkString.split(',').map(_.toInt)
+  private def parseCodes(input: Input): Codes = {
+    import adventOfCode.utils.algorithms.IteratorSplit
+    input.splitBy(',').map(_.toInt).toArray
+  }
 
   private def run(initialCodes: Codes, noun: Code, verb: Code): Code = {
     val patchedCodes = initialCodes.updated(1, noun).updated(2, verb)
@@ -37,7 +40,7 @@ object problem02 extends baseProblem {
   }
 
   private def run(state: State): State = {
-    import adventOfCode.utils.algorithms.SlidingTuple
+    import adventOfCode.utils.algorithms.IteratorSlidingTuple
 
     val states = Iterator.iterate(state)(calcNextState)
 

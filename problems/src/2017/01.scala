@@ -4,7 +4,7 @@ package year2017
 object problem01 extends baseProblem {
 
   override def solve1(input: Input): Int = {
-    import adventOfCode.utils.algorithms.SlidingTuple
+    import adventOfCode.utils.algorithms.IteratorSlidingTuple
 
     val (inputLen, cycledStr) = readInput(input)
 

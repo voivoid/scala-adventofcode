@@ -23,7 +23,7 @@ object problem02 extends baseProblem {
   private type KeypadMap = Map[(Key, Instruction), Key]
 
   private def makeKeypadMap(keypad: String): KeypadMap = {
-    import adventOfCode.utils.algorithms.SlidingTuple
+    import adventOfCode.utils.algorithms.IteratorSlidingTuple
 
     val lines = keypad.split('\n').map(_.toArray)
 

@@ -1,7 +1,7 @@
 package adventOfCode.utils
 package object algorithms {
 
-  implicit class SlidingTuple[A](iterator: scala.collection.Iterator[A]) {
+  implicit class IteratorSlidingTuple[A](iterator: scala.collection.Iterator[A]) {
     def sliding2: Iterator[(A, A)] = {
       val (i1, i2) = iterator.duplicate
       i1.zip(i2.drop(1))
@@ -49,6 +49,37 @@ package object algorithms {
 
       (minV, midV, maxV)
     }
+  }
+
+  implicit class IteratorSplit(charIter: scala.collection.Iterator[Char]) {
+    def splitBy(splitChar: Char): Iterator[String] = {
+      IteratorSplit.makeSplitIterator(splitChar, charIter.buffered)
+    }
+  }
+
+  object IteratorSplit {
+    def makeSplitIterator(splitChar: Char, buffIter: scala.collection.BufferedIterator[Char]) =
+      new scala.collection.AbstractIterator[String] {
+        dropSplitChars()
+
+        override def hasNext: Boolean = buffIter.hasNext
+        override def next(): String = {
+          val sb = new StringBuilder
+
+          while (buffIter.hasNext && buffIter.head != splitChar) {
+            sb.append(buffIter.next())
+          }
+
+          dropSplitChars()
+          sb.result()
+        }
+
+        private def dropSplitChars() = {
+          while (buffIter.hasNext && buffIter.head == splitChar) {
+            buffIter.next()
+          }
+        }
+      }
   }
 
 }

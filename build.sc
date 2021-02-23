@@ -51,6 +51,12 @@ object problems extends ScalaModule with ScalafmtModule {
     override def testFrameworks = Seq("utest.runner.Framework")
   }
 
+  object bench extends ScalaModule with ScalafmtModule {
+    override def scalaVersion = problems.scalaVersion
+    override def moduleDeps = Seq(problems, test)
+    override def ivyDeps = Agg(ivy"com.storm-enroute::scalameter:0.20")
+  }
+
 }
 
 object app extends ScalaModule with ScalafmtModule {

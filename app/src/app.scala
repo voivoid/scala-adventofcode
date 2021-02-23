@@ -18,28 +18,8 @@ object ProblemsApp {
   }
 
   private def solveProblem(problemId: String, input: scala.io.Source): Unit = {
-    val (problemStr, problemPart) = problemId.splitAt(problemId.indexOf('_'))
-    val problemModuleName = "adventOfCode.problems." + problemStr
-
-    val problem =
-      try {
-        val runtimeMirror =
-          scala.reflect.runtime.universe.runtimeMirror(getClass.getClassLoader)
-        val module = runtimeMirror.staticModule(problemModuleName)
-        runtimeMirror
-          .reflectModule(module)
-          .instance
-          .asInstanceOf[adventOfCode.problems.baseProblem]
-      } catch {
-        case e: Throwable =>
-          sys.error(s"Failed to load the problem ${problemStr}: ${e.getMessage}")
-      }
-
-    val result = problemPart match {
-      case "_1" => problem.solve1(input)
-      case "_2" => problem.solve2(input)
-      case _    => sys.error("Unexpected part: " + problemPart)
-    }
+    val solver = adventOfCode.problems.findSolver(problemId)
+    val result = solver(input)
 
     println(result)
   }
