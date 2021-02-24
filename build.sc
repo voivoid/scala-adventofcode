@@ -1,7 +1,7 @@
 import mill._, scalalib._, scalafmt._
 
 object problems extends ScalaModule with ScalafmtModule {
-  override def scalaVersion = "2.13.4"
+  override def scalaVersion = "2.13.5"
 
   override def ivyDeps = Agg(
     ivy"com.lihaoyi::fastparse:2.2.2",
@@ -122,6 +122,9 @@ object app extends ScalaModule with ScalafmtModule {
 
     check(runProblem("2017_02_1")(), "58975")
     check(runProblem("2017_02_2")(), "308")
+
+    check(runProblem("2017_03_1")(), "438")
+    check(runProblem("2017_03_2")(), "266330")
   }
 
   def test2018() = T.command {

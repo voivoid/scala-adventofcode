@@ -9,9 +9,10 @@ object problem01 extends baseProblem {
   }
 
   override def solve2(input: Input): Int = {
-    val freqChanges = getFreqChanges(input).toArray
-    val freqChangesCycled =
-      Iterator.continually(freqChanges).flatten
+    import adventOfCode.utils.algorithms.IterableCycle
+
+    val freqChanges = getFreqChanges(input).toList
+    val freqChangesCycled = freqChanges.cycled
 
     val freqsHistory = freqChangesCycled.scanLeft((Set.empty[Int], 0)) { case ((prevFreqs, currentFreq), change) =>
       (prevFreqs + currentFreq, currentFreq + change)

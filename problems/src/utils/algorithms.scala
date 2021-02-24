@@ -3,7 +3,7 @@ package object algorithms {
 
   implicit class IteratorSlidingTuple[A](iterator: scala.collection.Iterator[A]) {
     def sliding2: Iterator[(A, A)] = {
-      val (i1, i2) = iterator.duplicate
+      val (i1, i2) = iterator.duplicate // TODO: get rid of duplicate?
       i1.zip(i2.drop(1))
     }
   }
@@ -25,6 +25,12 @@ package object algorithms {
   implicit class IterableMinMax[T: Numeric](coll: scala.collection.Iterable[T]) {
     def minmax: (T, T) = {
       coll.iterator.minmax
+    }
+  }
+
+  implicit class IterableCycle[T](coll: scala.collection.Iterable[T]) {
+    def cycled: Iterator[T] = {
+      Iterator.continually(coll).flatten
     }
   }
 

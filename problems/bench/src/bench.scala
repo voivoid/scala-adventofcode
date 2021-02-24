@@ -6,7 +6,7 @@ object ProblemBenchmark extends Bench.LocalTime {
   val problem = "02"
   val part = 2
 
-  val inputFile = adventOfCode.problems.tests.Input.file(s"${year}_${problem}")
+  val inputFile = adventOfCode.problems.tests.Input.getURL(s"${year}_${problem}")
   val solve = adventOfCode.problems.findSolver(s"year${year}.problem${problem}_${part}")
 
   performance of "Problem" in {
