@@ -23,13 +23,11 @@ object problem02 extends baseProblem {
   private type KeypadMap = Map[(Key, Instruction), Key]
 
   private def makeKeypadMap(keypad: String): KeypadMap = {
-    import adventOfCode.utils.algorithms.IteratorSlidingTuple
+    import adventOfCode.utils.algorithms.{IteratorSlidingTuple, IteratorSplit}
 
-    val lines = keypad.split('\n').map(_.toArray)
-
-    def makeMap(lines: Array[Array[Char]], next: Instruction, prev: Instruction): KeypadMap = {
+    def makeMap(keypadLines: List[List[Char]], next: Instruction, prev: Instruction): KeypadMap = {
       val keyValues = for {
-        line <- lines
+        line <- keypadLines
         (key1, key2) <- line.iterator.sliding2
         if !key1.isWhitespace && !key2.isWhitespace
         keyValue <- Seq(((key1, next), key2), ((key2, prev), key1))
@@ -38,7 +36,8 @@ object problem02 extends baseProblem {
       keyValues.toMap
     }
 
-    makeMap(lines, 'R', 'L') ++ makeMap(lines.transpose, 'D', 'U')
+    val keypadLines = keypad.iterator.splitBy('\n').map(_.toList).toList
+    makeMap(keypadLines, 'R', 'L') ++ makeMap(keypadLines.transpose, 'D', 'U')
   }
 
   private def runInsructions(keypadMap: KeypadMap)(start: Key, instructions: String): Key = {

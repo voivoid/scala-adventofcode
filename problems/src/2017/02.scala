@@ -11,14 +11,14 @@ object problem02 extends baseProblem {
     solve(input, calcDiv)
   }
 
-  private def calcDiff(ints: Array[Int]): Int = {
+  private def calcDiff(ints: Vector[Int]): Int = {
     import adventOfCode.utils.algorithms.IteratorMinMax
 
     val (min, max) = ints.iterator.minmax
     max - min
   }
 
-  private def calcDiv(ints: Array[Int]): Int = {
+  private def calcDiv(ints: Vector[Int]): Int = {
     val solutions = for {
       a <- ints
       b <- ints
@@ -28,11 +28,11 @@ object problem02 extends baseProblem {
     solutions.headOption.getOrElse(sys.error("no solution"))
   }
 
-  private def solve(input: Input, calc: Array[Int] => Int): Int = {
+  private def solve(input: Input, calc: Vector[Int] => Int): Int = {
     input
       .getLines()
       .map(line => {
-        val ints = line.split('\t').map(s => s.toInt)
+        val ints = line.split('\t').map(s => s.toInt).toVector
         calc(ints)
       })
       .sum

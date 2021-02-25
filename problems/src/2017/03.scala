@@ -71,10 +71,10 @@ object problem03 extends baseProblem {
       .drop(1)
   }
 
-  private def getNeighbours(location: Location): Array[Location] = {
+  private def getNeighbours(location: Location): List[Location] = {
     import cats.implicits.catsSyntaxSemigroup
 
-    Array(left |+| up, up, right |+| up, left, right, left |+| down, down, right |+| down)
+    List(left |+| up, up, right |+| up, left, right, left |+| down, down, right |+| down)
       .map { _ |+| location }
   }
 

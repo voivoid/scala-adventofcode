@@ -4,7 +4,7 @@ package collections {
   object CharTrie {
     def apply(): CharTrie = apply(RootValue)
 
-    private def apply(c: Char): CharTrie = new CharTrie(new Array[CharTrie](NodesNum), c)
+    private def apply(c: Char): CharTrie = new CharTrie(Vector.fill(NodesNum)(null), c)
 
     private def NodesNum = 'z' - 'a' + 1
 
@@ -16,8 +16,8 @@ package collections {
     }
   }
 
-  class CharTrie(private val nodes: Array[CharTrie], val value: Char) {
-    require(nodes.size == CharTrie.NodesNum)
+  class CharTrie(private val nodes: Vector[CharTrie], val value: Char) {
+    assert(nodes.size == CharTrie.NodesNum)
 
     def insert(s: String): CharTrie = {
       if (s.isEmpty) this
@@ -43,7 +43,7 @@ package collections {
         trie.flatMap(_.node(c))
       }.isDefined
 
-    def getNodes: Array[CharTrie] = nodes.filter(_ != null)
+    def getNodes: Vector[CharTrie] = nodes.filter(_ != null)
 
     def node(c: Char): Option[CharTrie] = {
       Option(nodes(CharTrie.charIndex(c)))

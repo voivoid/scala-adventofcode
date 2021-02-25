@@ -14,7 +14,7 @@ object problem02 extends baseProblem {
   }
 
   override def solve2(input: Input): String = {
-    val ids = input.getLines().toArray
+    val ids = input.getLines().toList
     val trie = ids.foldLeft(CharTrie()) { case (trie, id) => trie.insert(id) }
 
     val (idWithMismatch, mismatchIndex) = ids.flatMap(findSingleMismatch(_, trie)).headOption.getOrElse(sys.error("no solution"))
