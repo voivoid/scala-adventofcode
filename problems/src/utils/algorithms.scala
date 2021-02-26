@@ -59,11 +59,9 @@ package object algorithms {
 
   implicit class IteratorSplit(charIter: scala.collection.Iterator[Char]) {
     def splitBy(splitChar: Char): Iterator[String] = {
-      IteratorSplit.makeSplitIterator(splitChar, charIter.buffered)
+      makeSplitIterator(splitChar, charIter.buffered)
     }
-  }
 
-  object IteratorSplit {
     def makeSplitIterator(splitChar: Char, buffIter: scala.collection.BufferedIterator[Char]) =
       new scala.collection.AbstractIterator[String] {
         dropSplitChars()
