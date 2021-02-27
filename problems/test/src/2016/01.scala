@@ -15,9 +15,5 @@ object year2016_01 extends BaseTests {
     test("solve2 base cases") {
       problem.solve2("R8, R4, R4, R8") ==> 4
     }
-
-    test("impl tests") {
-      problem.implTests()
-    }
   }
 }

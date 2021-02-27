@@ -1,14 +1,21 @@
 package adventOfCode.utils
 package object algorithms {
 
-  implicit class IteratorSlidingTuple[A](iterator: scala.collection.Iterator[A]) {
+  implicit class IteratorLast[A](iterator: Iterator[A]) {
+    def last: A = {
+      assert(iterator.hasNext)
+      iterator.foldLeft(iterator.next()) { case (_, v) => v }
+    }
+  }
+
+  implicit class IteratorSlidingTuple[A](iterator: Iterator[A]) {
     def sliding2: Iterator[(A, A)] = {
       val (i1, i2) = iterator.duplicate // TODO: get rid of duplicate?
       i1.zip(i2.drop(1))
     }
   }
 
-  implicit class IteratorMinMax[T: Numeric](iterator: scala.collection.Iterator[T]) {
+  implicit class IteratorMinMax[T: Numeric](iterator: Iterator[T]) {
     def minmax: (T, T) = {
       require(iterator.hasNext)
       val numeric = implicitly[Numeric[T]]
@@ -22,13 +29,13 @@ package object algorithms {
     }
   }
 
-  implicit class IterableMinMax[T: Numeric](coll: scala.collection.Iterable[T]) {
+  implicit class IterableMinMax[T: Numeric](coll: Iterable[T]) {
     def minmax: (T, T) = {
       coll.iterator.minmax
     }
   }
 
-  implicit class IterableCycle[T](coll: scala.collection.Iterable[T]) {
+  implicit class IterableCycle[T](coll: Iterable[T]) {
     def cycled: Iterator[T] = {
       Iterator.continually(coll).flatten
     }
@@ -57,7 +64,7 @@ package object algorithms {
     }
   }
 
-  implicit class IteratorSplit(charIter: scala.collection.Iterator[Char]) {
+  implicit class IteratorSplit(charIter: Iterator[Char]) {
     def splitBy(splitChar: Char): Iterator[String] = {
       makeSplitIterator(splitChar, charIter.buffered)
     }
