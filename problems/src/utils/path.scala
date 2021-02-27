@@ -1,7 +1,12 @@
 package adventOfCode.utils
 package path {
 
-  case class Location(x: Int, y: Int)
+  case class Location(x: Int, y: Int) extends Ordered[Location] {
+    override def compare(that: Location): Int = {
+      import scala.math.Ordered.orderingToOrdered
+      (x, y).compare((that.x, that.y))
+    }
+  }
 
   object Turn extends scala.Enumeration {
     val Left, Right, None = Value
