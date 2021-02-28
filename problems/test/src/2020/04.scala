@@ -5,7 +5,7 @@ object year2020_04 extends BaseTests {
   import utest._
   import adventOfCode.problems.year2020.{problem04 => problem}
 
-  val input1 = """ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
+  def input1 = """ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
                  |byr:1937 iyr:2017 cid:147 hgt:183cm
                  |
                  |iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
@@ -19,7 +19,7 @@ object year2020_04 extends BaseTests {
                  |hcl:#cfa07d eyr:2025 pid:166559648
                  |iyr:2011 ecl:brn hgt:59in""".stripMargin
 
-  val input2 = """eyr:1972 cid:100
+  def input2 = """eyr:1972 cid:100
                  |hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
                  |
                  |iyr:2019
