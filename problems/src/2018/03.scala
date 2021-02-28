@@ -31,7 +31,7 @@ object problem03 extends baseProblem {
   type ClaimId = Int
   private case class Claim(id: ClaimId, area: Rect)
 
-  private def parseClaims(input: Input): List[Claim] = input.getLines().map(parseClaim(_)).toList
+  private def parseClaims(input: Input): List[Claim] = input.getLines().map(parseClaim).toList
 
   private def foldOverlappedClaims[A](
     claims: List[Claim],

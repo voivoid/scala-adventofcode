@@ -48,8 +48,8 @@ object problem02 extends baseProblem {
 
   private def keypad1 =
     """123
-    |456
-    |789""".stripMargin
+      |456
+      |789""".stripMargin
 
   private def keypad2 =
     "  1  \n" +

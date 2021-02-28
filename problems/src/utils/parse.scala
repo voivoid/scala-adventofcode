@@ -10,12 +10,16 @@ package object parse {
     val parsed = parse(input, parser)
 
     parsed match {
-      case Parsed.Success(result, parsed) => {
-        assert(parsed == input.size)
+      case Parsed.Success(result, parsedChars) => {
+        assert(parsedChars == input.size)
         result
       }
       case err => sys.error(err.toString)
     }
+  }
+
+  def isParsed[Result](input: String, parser: P[_] => P[Result]): Boolean = {
+    parse(input, parser).fold((_, _, _) => false, (_, parsedChars) => parsedChars == input.size)
   }
 
 }
