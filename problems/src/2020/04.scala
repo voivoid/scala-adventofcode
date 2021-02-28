@@ -1,8 +1,6 @@
 package adventOfCode.problems
 package year2020
 
-import adventOfCode.utils.parse.isParsed
-
 object problem04 extends baseProblem {
 
   override def solve1(input: Input): Int = {
@@ -15,7 +13,7 @@ object problem04 extends baseProblem {
 
   import fastparse._
   import NoWhitespace._
-  import adventOfCode.utils.parse.{parseValue, num}
+  import adventOfCode.utils.parse.{parseValue, isParsed, num}
 
   private def solve(input: Input, checkPassport: Passport => Boolean): Int = {
     val passports = parsePassports(input.mkString)
