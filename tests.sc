@@ -53,6 +53,9 @@ trait AppTests
 
     check(runProblem("2019_03_1")(), "896")
     check(runProblem("2019_03_2")(), "16524")
+
+    check(runProblem("2019_04_1")(), "1169")
+    check(runProblem("2019_04_2")(), "757")
   }
 
   def test2020() = T.command {
