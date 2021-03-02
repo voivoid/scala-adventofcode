@@ -55,9 +55,9 @@ object problem04 extends baseProblem {
   private def parseRange(input: String): (Password, Password) = {
     import fastparse._
     import SingleLineWhitespace._
-    import adventOfCode.utils.parse.parseValue
+    import adventOfCode.utils.parse.{parseValue, digit}
 
-    def numStr[_: P] = P(CharIn("0-9")).repX(1).!
+    def numStr[_: P] = P(digit).repX(1).!
     def rangeParser[_: P] = P(numStr ~ "-" ~ numStr)
 
     val (from, to) = parseValue(input, rangeParser(_))

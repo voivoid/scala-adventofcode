@@ -12,12 +12,12 @@ object problem02 extends baseProblem {
     val resultToFind = 19690720
 
     val solutions = for {
-      noun <- 0 to 99
-      verb <- 0 to 99
+      noun <- (0 to 99).iterator
+      verb <- (0 to 99).iterator
       if run(codes, noun, verb) == resultToFind
     } yield 100 * noun + verb
 
-    solutions.headOption.getOrElse(sys.error("no solution"))
+    solutions.nextOption().getOrElse(sys.error("no solution"))
   }
 
   private type Code = Int

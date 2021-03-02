@@ -8,9 +8,6 @@ import scala.collection.mutable.ListBuffer
 
 object problem03 extends baseProblem {
 
-  type Point = geo.Point[Int]
-  type Rect = geo.Rect[Int]
-
   override def solve1(input: Input): Int = {
     val claims = parseClaims(input)
 
@@ -28,7 +25,8 @@ object problem03 extends baseProblem {
     nonOverlappedClaims.head
   }
 
-  type ClaimId = Int
+  private type Rect = geo.Rect[Int]
+  private type ClaimId = Int
   private case class Claim(id: ClaimId, area: Rect)
 
   private def parseClaims(input: Input): List[Claim] = input.getLines().map(parseClaim).toList

@@ -27,7 +27,7 @@ object problem02 extends baseProblem {
 
     def makeMap(keypadLines: List[List[Char]], next: Instruction, prev: Instruction): KeypadMap = {
       val keyValues = for {
-        line <- keypadLines
+        line <- keypadLines.iterator
         (key1, key2) <- line.iterator.sliding2
         if !key1.isWhitespace && !key2.isWhitespace
         keyValue <- Seq(((key1, next), key2), ((key2, prev), key1))

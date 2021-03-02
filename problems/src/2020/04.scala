@@ -13,7 +13,7 @@ object problem04 extends baseProblem {
 
   import fastparse._
   import NoWhitespace._
-  import adventOfCode.utils.parse.{parseValue, isParsed, num}
+  import adventOfCode.utils.parse.{parseValue, isParsed, num, digit}
 
   private def solve(input: Input, checkPassport: Passport => Boolean): Int = {
     val passports = parsePassports(input.mkString)
@@ -84,7 +84,7 @@ object problem04 extends baseProblem {
   private def isPIDvalid(pid: String): Boolean = pid.size == 9 && pid.forall(_.isDigit)
 
   private def isYearInRange(field: String, from: Int, to: Int): Boolean = {
-    def dateParser[_: P] = P(CharIn("0-9").rep(4)).!.map(_.toInt).filter(n => n >= from && n <= to)
+    def dateParser[_: P] = P(digit.rep(4)).!.map(_.toInt).filter(n => n >= from && n <= to)
     isParsed(field, dateParser(_))
   }
 

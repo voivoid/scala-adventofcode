@@ -20,12 +20,12 @@ object problem02 extends baseProblem {
 
   private def calcDiv(ints: Vector[Int]): Int = {
     val solutions = for {
-      a <- ints
-      b <- ints
+      a <- ints.iterator
+      b <- ints.iterator
       if a > b && a % b == 0
     } yield a / b
 
-    solutions.headOption.getOrElse(sys.error("no solution"))
+    solutions.nextOption().getOrElse(sys.error("no solution"))
   }
 
   private def solve(input: Input, calc: Vector[Int] => Int): Int = {

@@ -3,7 +3,8 @@ package object parse {
 
   import fastparse._
 
-  def num[_: P] = P(CharIn("0-9").repX(1).!.map(_.toInt))
+  def digit[_: P] = P(CharIn("0-9"))
+  def num[_: P] = P(digit.repX(1).!.map(_.toInt))
   def alpha[_: P] = CharIn("a-zA-Z").!.map(_.head)
 
   def parseValue[Result](input: String, parser: P[_] => P[Result]): Result = {
@@ -11,7 +12,7 @@ package object parse {
 
     parsed match {
       case Parsed.Success(result, parsedChars) => {
-        assert(parsedChars == input.size)
+        if (parsedChars != input.size) sys.error(s"parser failed to parse the whole input")
         result
       }
       case err => sys.error(err.toString)
