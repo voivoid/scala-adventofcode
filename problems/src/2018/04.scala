@@ -13,7 +13,7 @@ object problem04 extends baseProblem {
 
   private def solve(input: Input, findMostSleepyGuard: Seq[Shift] => Int): Int = {
     val shiftsMap = makeGuardIdToShiftsMap(input)
-    val mostSleepyGuardId = shiftsMap.maxBy { case (_, shifts) => findMostSleepyGuard( shifts ) }._1
+    val mostSleepyGuardId = shiftsMap.maxBy { case (_, shifts) => findMostSleepyGuard(shifts) }._1
     val mostSleepyMinute = findMostSleepyMinute(shiftsMap(mostSleepyGuardId)).minute
 
     mostSleepyGuardId * mostSleepyMinute

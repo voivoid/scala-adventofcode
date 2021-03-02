@@ -8,10 +8,43 @@ package object algorithms {
     }
   }
 
-  implicit class IteratorSlidingTuple[A](iterator: Iterator[A]) {
+  implicit class IteratorFindFirstDuplicate[A](iter: Iterator[A]) {
+    def findFirstDuplicate: Option[A] = {
+      if (!iter.hasNext) {
+        None
+      } else {
+        val first = iter.next()
+        iter
+          .scanLeft((Set.empty[A], first)) { case ((set, prev), elem) =>
+            (set + prev, elem)
+          }
+          .find { case (set, elem) =>
+            set(elem)
+          }
+          .map { case (_, elem) => elem }
+      }
+    }
+  }
+
+  implicit class IteratorSlidingTuple[A](iter: Iterator[A]) {
     def sliding2: Iterator[(A, A)] = {
-      val (i1, i2) = iterator.duplicate // TODO: get rid of duplicate?
-      i1.zip(i2.drop(1))
+      if (!iter.hasNext) {
+        Iterator.empty
+      } else {
+        new Iterator[(A, A)] {
+          override def hasNext: Boolean = iter.hasNext
+
+          override def next(): (A, A) = {
+            val second = iter.next()
+            val result = (first, second)
+            first = second
+
+            result
+          }
+
+          var first: A = iter.next()
+        }
+      }
     }
   }
 
