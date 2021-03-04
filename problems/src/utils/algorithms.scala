@@ -1,5 +1,27 @@
 package adventOfCode.utils
+
+import scala.collection.{ AbstractView, BuildFrom }
+import scala.collection.generic.IsSeq
+import scala.language.implicitConversions
+
+package algorithms
+{
+  class CollectionSlidingTuple[Repr, S <: IsSeq[Repr]](coll: Repr, seq: S) {
+    private type B = (seq.A, seq.A)
+    def sliding2[That](implicit bf: BuildFrom[Repr, B, That]): That = {
+      val seqOps = seq(coll)
+      bf.fromSpecific(coll)(new AbstractView[B] {
+        def iterator = seqOps.iterator.sliding2
+      })
+    }
+  }
+
+}
+
 package object algorithms {
+
+  implicit def CollectionSlidingTuple[Repr](coll: Repr)(implicit seq: IsSeq[Repr]): CollectionSlidingTuple[Repr, seq.type] =
+    new CollectionSlidingTuple(coll, seq)
 
   implicit class IteratorLast[A](iterator: Iterator[A]) {
     def last: A = {
