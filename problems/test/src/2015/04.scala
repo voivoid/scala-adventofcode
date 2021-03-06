@@ -7,7 +7,7 @@ object year2015_04 extends BaseTests {
 
   val tests = Tests {
     test("solve1 base cases") {
-      problem.solve1("abcdef") ==> 609043
+      problem.solve1("abcdef6090") ==> 43
     }
   }
 }
