@@ -100,7 +100,7 @@ object problem03 extends baseProblem {
     lb.result()
   }
 
-  def implTests(): Unit = {
+  private[problems] def implTests(): Unit = {
     import utest._
 
     assertMatch(parseClaim("#1 @ 1,3: 4x4")) { case Claim(1, Rect(Point(1, 3), Point(4, 6))) => }

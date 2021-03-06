@@ -45,7 +45,7 @@ object problem02 extends baseProblem {
     parseValue(entryStr, parser(_))
   }
 
-  def implTests(): Unit = {
+  private[problems] def implTests(): Unit = {
     import utest._
 
     assertMatch(parseEntry("1-3 a: abcd")) { case Entry(1, 3, 'a', "abcd") => }

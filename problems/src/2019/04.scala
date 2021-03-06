@@ -81,7 +81,7 @@ object problem04 extends baseProblem {
     impl(password.zipWithIndex)
   }
 
-  def implTests(): Unit = {
+  private[problems] def implTests(): Unit = {
     import utest._
 
     nextIncreasingPassword("111111".toList) ==> "111112".toList

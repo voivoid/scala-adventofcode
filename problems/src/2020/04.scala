@@ -88,7 +88,7 @@ object problem04 extends baseProblem {
     isParsed(field, dateParser(_))
   }
 
-  def implTests(): Unit = {
+  private[problems] def implTests(): Unit = {
     import utest._
 
     val passports = parsePassports("abc:def xxx:yyy\nyyy:zzz\n\nqwe:asd")

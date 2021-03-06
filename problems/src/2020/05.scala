@@ -27,8 +27,10 @@ object problem05 extends baseProblem {
   private def calcCol(colStr: String): Int = calcSeat(colStr, LowerHalf = 'L', UpperHalf = 'R')
 
   private def calcSeat(letters: String, LowerHalf: Char, UpperHalf: Char) = {
+    import adventOfCode.utils.algorithms.powInt
+
     val startSeat = 0
-    val endSeat = math.pow(2.0, letters.size.toDouble).toInt - 1
+    val endSeat = powInt(2, letters.size) - 1
 
     val (s1, s2) = letters.foldLeft((startSeat, endSeat)) {
       case ((from, to), letter) => {

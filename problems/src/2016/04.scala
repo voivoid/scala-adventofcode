@@ -64,7 +64,7 @@ object problem04 extends baseProblem {
     parseValue(input, parser(_))
   }
 
-  def implTests() = {
+  private[problems] def implTests() = {
     import utest._
 
     assertMatch(parseRoom("aaaaa-bbb-z-y-x-123[abxyz]")) { case Room("aaaaa-bbb-z-y-x", 123, "abxyz") => }

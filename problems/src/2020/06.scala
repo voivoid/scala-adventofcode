@@ -43,7 +43,7 @@ object problem06 extends baseProblem {
     parseValue(input, groups(_))
   }
 
-  def implTests(): Unit = {
+  private[problems] def implTests(): Unit = {
     import utest._
 
     assertMatch(parseGroups("abc\ndef\n\naaa")) { case Seq(Seq("abc", "def"), Seq("aaa")) => }

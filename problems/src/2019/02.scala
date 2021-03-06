@@ -97,7 +97,7 @@ object problem02 extends baseProblem {
     type OpCode = Value
   }
 
-  def implTests(): Unit = {
+  private[problems] def implTests(): Unit = {
     import utest._
 
     assertMatch(run(State(Vector(1, 0, 0, 0, 99), 0))) { case State(Vector(2, 0, 0, 0, 99), 4) => }

@@ -1,11 +1,10 @@
 package adventOfCode.utils
 
-import scala.collection.{ AbstractView, BuildFrom }
+import scala.collection.{AbstractView, BuildFrom}
 import scala.collection.generic.IsSeq
 import scala.language.implicitConversions
 
-package algorithms
-{
+package algorithms {
   class CollectionSlidingTuple[Repr, S <: IsSeq[Repr]](coll: Repr, seq: S) {
     private type B = (seq.A, seq.A)
     def sliding2[That](implicit bf: BuildFrom[Repr, B, That]): That = {
@@ -19,6 +18,12 @@ package algorithms
 }
 
 package object algorithms {
+
+  def powInt(n: Int, pow: Int): Int = {
+    require(pow >= 0)
+    if (pow == 0) 1
+    else Math.multiplyExact(n, powInt(n, pow - 1))
+  }
 
   implicit def CollectionSlidingTuple[Repr](coll: Repr)(implicit seq: IsSeq[Repr]): CollectionSlidingTuple[Repr, seq.type] =
     new CollectionSlidingTuple(coll, seq)

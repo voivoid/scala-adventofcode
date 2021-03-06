@@ -73,7 +73,7 @@ object problem04 extends baseProblem {
     parseValue(input, parser(_))
   }
 
-  def implTests(): Unit = {
+  private[problems] def implTests(): Unit = {
     import utest._
 
     val guard10 = """[1518-11-01 00:00] Guard #10 begins shift
