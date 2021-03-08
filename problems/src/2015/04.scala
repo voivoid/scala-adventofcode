@@ -36,9 +36,11 @@ object problem04 extends baseProblem {
     import scala.concurrent.{Await, Future}
 
     val ranges = breakRange(range, cores)
-    val futures = ranges.map(range => Future {
-      findPostfixesJob(secretKey, leadingZeroes, range)
-    })
+    val futures = ranges.map(range =>
+      Future {
+        findPostfixesJob(secretKey, leadingZeroes, range)
+      }
+    )
 
     val aggregatedFuture = Future.reduceLeft(futures)(_ ++ _)
 
@@ -51,15 +53,18 @@ object problem04 extends baseProblem {
     resultIterator.concat(findPostfixesChunkByChunk(secretKey, leadingZeroes, to, chunk))
   }
 
-  private def breakRange(range: Range, cores: Int): List[Range] = {
-    if( range.isEmpty || cores <= 0 ) Nil
-    else {
-      val itemsPerSubrange = range.size / cores
-      val incSubrange = if (range.size % cores > 0) 1 else 0
-      val (subRange, restRange) = range.splitAt(itemsPerSubrange + incSubrange)
+  private def breakRange(totalRange: Range, totalCores: Int): List[Range] = {
+    List
+      .unfold((totalRange, totalCores)) {
+        case (range, cores) if range.isEmpty || cores <= 0 => None
+        case (range, cores) => {
+          val itemsPerSubrange = range.size / cores
+          val incSubrange = if (range.size % cores > 0) 1 else 0
+          val (subRange, restRange) = range.splitAt(itemsPerSubrange + incSubrange)
 
-      subRange :: breakRange(restRange, cores - 1)
-    }
+          Some((subRange, (restRange, cores - 1)))
+        }
+      }
   }
 
   private def getSecretKey(input: Input) = input.mkString.trim
