@@ -14,15 +14,52 @@ object problem04 extends baseProblem {
   }
 
   def findPostfixes(secretKey: String, leadingZeroes: Int): Iterator[Int] = {
-    import java.security.MessageDigest
+    findPostfixesChunkByChunk(secretKey, leadingZeroes, 0, 100000)
+  }
 
+  private val cores = Runtime.getRuntime().availableProcessors();
+
+  private def findPostfixesJob(secretKey: String, leadingZeroes: Int, range: Range): Iterator[Int] = {
+    import java.security.MessageDigest
     val digestInstance = MessageDigest.getInstance("MD5")
 
-    Iterator
-      .from(0)
+    range
       .filter(postfix => {
         hasLeadingZeroes(digestInstance, secretKey + postfix.toString, leadingZeroes)
       })
+      .iterator
+  }
+
+  private def runFindPostfixesJobs(secretKey: String, leadingZeroes: Int, range: Range): Iterator[Int] = {
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent.duration.Duration
+    import scala.concurrent.{Await, Future}
+
+    val ranges = breakRange(range, cores)
+    val futures = ranges.map(range => Future {
+      findPostfixesJob(secretKey, leadingZeroes, range)
+    })
+
+    val aggregatedFuture = Future.reduceLeft(futures)(_ ++ _)
+
+    Await.result(aggregatedFuture, Duration.Inf)
+  }
+
+  private def findPostfixesChunkByChunk(secretKey: String, leadingZeroes: Int, from: Int, chunk: Int): Iterator[Int] = {
+    val to = from + chunk
+    val resultIterator = runFindPostfixesJobs(secretKey, leadingZeroes, from until to)
+    resultIterator.concat(findPostfixesChunkByChunk(secretKey, leadingZeroes, to, chunk))
+  }
+
+  private def breakRange(range: Range, cores: Int): List[Range] = {
+    if( range.isEmpty || cores <= 0 ) Nil
+    else {
+      val itemsPerSubrange = range.size / cores
+      val incSubrange = if (range.size % cores > 0) 1 else 0
+      val (subRange, restRange) = range.splitAt(itemsPerSubrange + incSubrange)
+
+      subRange :: breakRange(restRange, cores - 1)
+    }
   }
 
   private def getSecretKey(input: Input) = input.mkString.trim

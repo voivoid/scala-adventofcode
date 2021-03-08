@@ -14,14 +14,14 @@ package collections {
     def next(n: Int): Zipper[A] = n match {
       case 0          => this
       case n if n < 0 => prev(n.abs)
-      case n          => Iterator.iterate(this, n+1)(_.next).last
+      case n          => Iterator.iterate(this, n + 1)(_.next).last
     }
 
     def prev: Zipper[A] = new Zipper[A](left.tail, left.head :: right)
     def prev(n: Int): Zipper[A] = n match {
       case 0          => this
       case n if n < 0 => next(n.abs)
-      case n          => Iterator.iterate(this, n+1)(_.prev).last
+      case n          => Iterator.iterate(this, n + 1)(_.prev).last
     }
 
     def current: A = right.head

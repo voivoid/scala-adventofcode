@@ -7,6 +7,7 @@ object problems extends ScalaModule with ScalafmtModule {
   override def ivyDeps = Agg(
     ivy"com.lihaoyi::fastparse:2.2.2",
     ivy"com.lihaoyi::utest:0.7.7",
+    ivy"org.scala-lang.modules::scala-parallel-collections:1.0.1",
     ivy"org.typelevel::cats-core:2.2.0")
 
   object test extends Tests with ScalafmtModule {
