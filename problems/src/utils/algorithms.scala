@@ -124,6 +124,17 @@ package object algorithms {
     }
   }
 
+  implicit class IteratorToMultimap[A, B](iter: Iterator[(A, B)]) {
+    def toMultimap: Map[A, Set[B]] = {
+      iter.foldLeft(Map.empty[A, Set[B]]) { case (map, (k, v)) =>
+        map.updatedWith(k) {
+          case None     => Some(Set(v))
+          case Some(vs) => Some(vs + v)
+        }
+      }
+    }
+  }
+
   implicit class IteratorSplit(charIter: Iterator[Char]) {
     def splitBy(splitChar: Char): Iterator[String] = {
       makeSplitIterator(splitChar, charIter.buffered)
