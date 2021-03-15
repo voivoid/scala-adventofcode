@@ -36,16 +36,16 @@ object problem06 extends baseProblem {
     val (increaseForAllBlocks, nextBlocksToIncrement) = maxBlock /% bankSize
 
     def calcBlockIncrease(idx: Int): Int = {
-      val range = (maxBlockIndex +1) to maxBlockIndex + nextBlocksToIncrement
-      val idxToFind = if( idx > maxBlockIndex ) idx else idx + bankSize
+      val range = (maxBlockIndex + 1) to maxBlockIndex + nextBlocksToIncrement
+      val idxToFind = if (idx > maxBlockIndex) idx else idx + bankSize
 
-      if( range.contains(idxToFind) ) 1 else 0
+      if (range.contains(idxToFind)) 1 else 0
     }
 
-    indexedBank.map{
-      case( _, index ) if index == maxBlockIndex => increaseForAllBlocks
-      case( block, index ) => {
-        block + increaseForAllBlocks + calcBlockIncrease( index )
+    indexedBank.map {
+      case (_, index) if index == maxBlockIndex => increaseForAllBlocks
+      case (block, index) => {
+        block + increaseForAllBlocks + calcBlockIncrease(index)
       }
     }
   }

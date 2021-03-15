@@ -1,7 +1,6 @@
 package adventOfCode.utils
 package path {
 
-
   object Turn extends scala.Enumeration {
     val Left, Right, None = Value
     type Turn = Value
