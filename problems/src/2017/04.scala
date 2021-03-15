@@ -19,7 +19,7 @@ object problem04 extends baseProblem {
       if (checkAnagrams) words.map(_.sorted) else words
     }
 
-    val noDuplicates = words.findFirstDuplicate.isEmpty
+    val noDuplicates = words.findFirstDuplicateElem.isEmpty
     noDuplicates
   }
 

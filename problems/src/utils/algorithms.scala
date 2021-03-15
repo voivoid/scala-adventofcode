@@ -31,12 +31,15 @@ package object algorithms {
   implicit class IteratorLast[A](iterator: Iterator[A]) {
     def last: A = {
       assert(iterator.hasNext)
-      iterator.foldLeft(iterator.next()) { case (_, v) => v }
+      val first = iterator.next()
+      iterator.foldLeft(first) { case (_, v) => v }
     }
   }
 
   implicit class IteratorFindFirstDuplicate[A](iter: Iterator[A]) {
-    def findFirstDuplicate: Option[A] = {
+    case class Result(elem: A, index: Int)
+
+    def findFirstDuplicate: Option[Result] = {
       if (!iter.hasNext) {
         None
       } else {
@@ -45,11 +48,20 @@ package object algorithms {
           .scanLeft((Set.empty[A], first)) { case ((set, prev), elem) =>
             (set + prev, elem)
           }
-          .find { case (set, elem) =>
-            set(elem)
+          .zipWithIndex
+          .find { case ((set, elem), _) =>
+            set.contains(elem)
           }
-          .map { case (_, elem) => elem }
+          .map { case ((_, elem), index) => Result(elem, index) }
       }
+    }
+
+    def findFirstDuplicateElem: Option[A] = {
+      findFirstDuplicate.map(_.elem)
+    }
+
+    def findFirstDuplicateIndex: Option[Int] = {
+      findFirstDuplicate.map(_.index)
     }
   }
 

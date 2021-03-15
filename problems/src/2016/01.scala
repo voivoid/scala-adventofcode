@@ -18,7 +18,7 @@ object problem01 extends baseProblem {
     import adventOfCode.utils.algorithms.IteratorFindFirstDuplicate
 
     val path = makePath(input)
-    val firstIntersection = path.stepByStepLocations().findFirstDuplicate.getOrElse(sys.error("Solution not found"))
+    val firstIntersection = path.stepByStepLocations().findFirstDuplicateElem.getOrElse(sys.error("Solution not found"))
 
     manhattanDistance(startLocation, firstIntersection)
   }
