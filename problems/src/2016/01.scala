@@ -11,7 +11,7 @@ object problem01 extends baseProblem {
     val path = makePath(input)
     val finish = path.locations().last
 
-    distance(startLocation, finish)
+    manhattanDistance(startLocation, finish)
   }
 
   override def solve2(input: Input): Int = {
@@ -20,7 +20,7 @@ object problem01 extends baseProblem {
     val path = makePath(input)
     val firstIntersection = path.stepByStepLocations().findFirstDuplicate.getOrElse(sys.error("Solution not found"))
 
-    distance(startLocation, firstIntersection)
+    manhattanDistance(startLocation, firstIntersection)
   }
 
   private def makePath(input: Input): BasePath = {

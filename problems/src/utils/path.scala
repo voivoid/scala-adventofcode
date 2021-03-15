@@ -1,12 +1,6 @@
 package adventOfCode.utils
 package path {
 
-  case class Location(x: Int, y: Int) extends Ordered[Location] {
-    override def compare(that: Location): Int = {
-      import scala.math.Ordered.orderingToOrdered
-      (x, y).compare((that.x, that.y))
-    }
-  }
 
   object Turn extends scala.Enumeration {
     val Left, Right, None = Value
@@ -123,7 +117,10 @@ package object path {
   import Bearing.Bearing
   import Dir.Dir
 
-  def distance(from: Location, to: Location) = {
+  type Location = geo.Point[Int]
+  val Location = geo.Point[Int] _
+
+  def manhattanDistance(from: Location, to: Location) = {
     (to.x - from.x).abs + (to.y - from.y).abs
   }
 

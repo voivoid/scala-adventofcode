@@ -4,11 +4,19 @@ package geo
 case class Width[A](n: A)
 case class Height[A](n: A)
 
-case class Point[A](x: A, y: A)(implicit num: Numeric[A]) {
+case class Point[A](x: A, y: A)(implicit num: Numeric[A]) extends Ordered[Point[A]] {
   import num._
 
   def move(dx: A, dy: A): Point[A] = {
     Point(plus(x, dx), plus(y, dy))
+  }
+
+  def +(p: Point[A]): Point[A] = move(p.x, p.y)
+  def -(p: Point[A]): Point[A] = move(-p.x, -p.y)
+
+  override def compare(that: Point[A]): Int = {
+    import scala.math.Ordered.orderingToOrdered
+    (x, y).compare((that.x, that.y))
   }
 }
 
@@ -39,6 +47,9 @@ case class Rect[A](leftTop: Point[A], rightBottom: Point[A])(implicit num: Numer
   }
 
   def area: A = times(width, height)
+
+  def inflate(n: A): Rect[A] = inflate(n, n)
+  def inflate(x: A, y: A): Rect[A] = new Rect(leftTop - Point(x, y), rightBottom + Point(x, y))
 }
 
 object Rect {

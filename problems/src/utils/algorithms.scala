@@ -128,8 +128,20 @@ package object algorithms {
     def toMultimap: Map[A, Set[B]] = {
       iter.foldLeft(Map.empty[A, Set[B]]) { case (map, (k, v)) =>
         map.updatedWith(k) {
-          case None     => Some(Set(v))
           case Some(vs) => Some(vs + v)
+          case None     => Some(Set(v))
+        }
+      }
+    }
+
+  }
+
+  implicit class IteratorGroupValuesByTheirLength[A](iter: Iterator[A]) {
+    def groupValuesByTheirLength: Map[A, Int] = {
+      iter.foldLeft(Map.empty[A, Int]) { case (map, k) =>
+        map.updatedWith(k) {
+          case Some(n) => Some(n + 1)
+          case None    => Some(1)
         }
       }
     }

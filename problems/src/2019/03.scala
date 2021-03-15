@@ -10,7 +10,7 @@ object problem03 extends baseProblem {
 
     val intersections = visitedLocsIter1.toSet.intersect(visitedLocsIter2.toSet) - centralPort
 
-    val distancesToCentralPort = intersections.map(distance(_, centralPort))
+    val distancesToCentralPort = intersections.map(manhattanDistance(_, centralPort))
     distancesToCentralPort.min
   }
 
