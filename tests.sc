@@ -38,6 +38,9 @@ trait AppTests
 
     check(runProblem("2016_06_1")(), "wkbvmikb")
     check(runProblem("2016_06_2")(), "evakwaga")
+
+    check(runProblem("2016_07_1")(), "118")
+    check(runProblem("2016_07_2")(), "260")
   }
 
   def test2017() = T.command {
