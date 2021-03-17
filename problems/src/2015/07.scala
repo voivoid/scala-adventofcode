@@ -75,6 +75,7 @@ object problem07 extends baseProblem {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{num, alpha, parseValue}
+    import Function.const
 
     def wireName[_: P]: P[WireName] = P(alpha.repX(1).!)
 
@@ -84,10 +85,10 @@ object problem07 extends baseProblem {
 
     def unaryOp[_: P]: P[Source] = P("NOT" ~ source).map(arg => UnaryOp(arg, signal => ~signal))
 
-    def andF[_: P]: P[BinaryFunc] = P("AND").map(_ => _ & _)
-    def orF[_: P]: P[BinaryFunc] = P("OR").map(_ => _ | _)
-    def lshiftF[_: P]: P[BinaryFunc] = P("LSHIFT").map(_ => _ << _)
-    def rshiftF[_: P]: P[BinaryFunc] = P("RSHIFT").map(_ => _ >> _)
+    def andF[_: P]: P[BinaryFunc] = P("AND").map(const(_ & _))
+    def orF[_: P]: P[BinaryFunc] = P("OR").map(const(_ | _))
+    def lshiftF[_: P]: P[BinaryFunc] = P("LSHIFT").map(const(_ << _))
+    def rshiftF[_: P]: P[BinaryFunc] = P("RSHIFT").map(const(_ >> _))
 
     def binaryOp[_: P]: P[Source] = P(source ~ (andF | orF | lshiftF | rshiftF) ~ source).map { case (arg1, f, arg2) =>
       BinaryOp(arg1, arg2, f)

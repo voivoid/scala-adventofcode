@@ -17,10 +17,7 @@ package collections {
       case n          => LazyList.iterate(this)(_.next)(n)
     }
 
-    def hasNext = right match {
-      case _ :: _ :: _ => true
-      case _           => false
-    }
+    def hasNext = right.lengthCompare(2) >= 0
 
     def prev: Zipper[A] = if (hasPrev) make(left.tail, left.head :: right) else sys.error("no more prev elements")
     def prev(n: Int): Zipper[A] = n match {
