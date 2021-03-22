@@ -150,11 +150,8 @@ package object algorithms {
 
   implicit class IteratorGroupValuesByTheirLength[A](iter: Iterator[A]) {
     def groupValuesByTheirLength: Map[A, Int] = {
-      iter.foldLeft(Map.empty[A, Int]) { case (map, k) =>
-        map.updatedWith(k) {
-          case Some(n) => Some(n + 1)
-          case None    => Some(1)
-        }
+      iter.foldLeft(Map.empty[A, Int]) { case (map, key) =>
+        map.updatedWith(key)(vCounter => vCounter.map(_ + 1).orElse(Some(1)))
       }
     }
   }

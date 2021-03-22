@@ -27,7 +27,7 @@ object problem07 extends baseProblem {
   private type SearchResult = Either[MismatchedWeight, Tower]
 
   // Searching for the mismatch using DFS. Recursively visit tree nodes while
-  //  tower's 'subtowersWeight' checks and updates are made on the way back.
+  // tower's 'subtowersWeight' checks and updates are made on the way back.
   // The function returns Left[MismatchedWeight] if the mismatch weight is found.
   // In this case the recursive search will be stopped. No excessive iteration is done
   // Right[Tower] is returned otherwise. The returned tower will a 'subtowersWeight' value set
@@ -60,7 +60,7 @@ object problem07 extends baseProblem {
 
   private def checkWeightMismatch(towers: Seq[Tower]): Option[MismatchedWeight] = {
     import adventOfCode.utils.algorithms.IteratorSlidingTuple
-    val commonWeight = towers.iterator.map(_.subtowersWeight).sliding2.find{ case( a, b ) => a == b }.get._1
+    val commonWeight = towers.iterator.map(_.subtowersWeight).sliding2.find { case (a, b) => a == b }.get._1
 
     towers
       .find(_.subtowersWeight != commonWeight)
