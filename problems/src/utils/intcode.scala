@@ -6,20 +6,28 @@ package object intcode {
   type Memory = Vector[Code]
   type In = List[Code]
   type Out = List[Code]
+  type IP = Int
 
-  def parseMemory(input: scala.io.Source): Memory = {
+  def parseMemory(source: scala.io.Source): Memory = {
     import adventOfCode.utils.algorithms.IteratorSplit
-    input.splitBy(',').map(_.toInt).toVector
+    source.splitBy(',').map(_.toInt).toVector
   }
 
   def run(memory: Memory, input: In = List.empty): Machine = {
-    val initialState = Machine(memory, 0, input, List.empty)
-    val finalState = runMachine(initialState)
-
+    val finalState = runMachine(makeMachine(memory, input))
     finalState
   }
 
-  private def runMachine(machine: Machine): Machine = {
+  def makeMachine(memory: Memory, input: In = List.empty): Machine = {
+    Machine(memory, 0, input, List.empty)
+  }
+
+  def resumeMachine(machine: Machine, input: In): Machine = {
+    assert(machine.waitsForInput)
+    runMachine(machine.copy(input = machine.input ++ input))
+  }
+
+  def runMachine(machine: Machine): Machine = {
     import adventOfCode.utils.algorithms.IteratorSlidingTuple
 
     val states = Iterator.iterate(machine)(calcNextState)
@@ -45,7 +53,7 @@ package object intcode {
 }
 
 package intcode {
-  case class Machine(memory: Memory, instructionPointer: Int, input: In, output: Out) {
+  case class Machine(memory: Memory, instructionPointer: IP, input: In, output: Out) {
     def getCurrentOp = memory(instructionPointer)
     def getOpArg(argN: Int): Code = {
       getParameterMode(argN) match {
@@ -63,6 +71,9 @@ package intcode {
 
     def readMem(addr: Code): Code = memory(addr)
     def writeMem(addr: Code, value: Code): Machine = copy(memory = memory.updated(addr, value))
+
+    def waitsForInput: Boolean = getCurrentOp == InputOp.codeId
+    def halted: Boolean = getCurrentOp == HaltOp.codeId
   }
 
   trait Op {
@@ -70,14 +81,15 @@ package intcode {
     val length: Int
 
     def run(machine: Machine): Machine = {
-      val updatedMachine = updateMachineState(machine, getArgs(machine))
-      updatedMachine.copy(instructionPointer = updatedMachine.instructionPointer + length)
+      val (updatedMachine, nextIPOpt) = updateMachineState(machine, getArgs(machine))
+      val nextIP = nextIPOpt.getOrElse(updatedMachine.instructionPointer + length)
+      updatedMachine.copy(instructionPointer = nextIP)
     }
 
     type Args
     def getArgs(machine: Machine): Args
 
-    def updateMachineState(machine: Machine, args: Args): Machine
+    def updateMachineState(machine: Machine, args: Args): (Machine, Option[IP])
   }
 
   trait UnaryOp extends Op {
@@ -112,21 +124,29 @@ package intcode {
   object InputOp extends UnaryOp {
     override val codeId: Code = 3
 
-    override def updateMachineState(machine: Machine, toAddr: Code): Machine = {
-      val inputCode = machine.input.head
+    override def updateMachineState(machine: Machine, toAddr: Code): (Machine, Option[IP]) = {
+      if (!machine.input.isEmpty) {
+        val inputCode = machine.input.head
+        val updatedMachine = machine
+          .writeMem(toAddr, inputCode)
+          .copy(input = machine.input.tail)
 
-      machine
-        .writeMem(toAddr, inputCode)
-        .copy(input = machine.input.tail)
+        (updatedMachine, None)
+      } else {
+        // if there is no more input force IP to stay unchanged so the machine will halt
+        (machine, Some(machine.instructionPointer))
+      }
     }
   }
 
   object OutputOp extends UnaryOp {
     override val codeId: Code = 4
 
-    override def updateMachineState(machine: Machine, fromAddr: Code): Machine = {
+    override def updateMachineState(machine: Machine, fromAddr: Code): (Machine, Option[IP]) = {
       val outputValue = machine.readMem(fromAddr)
-      machine.copy(output = outputValue :: machine.output)
+      val updatedMachine = machine.copy(output = outputValue :: machine.output)
+
+      (updatedMachine, None)
     }
   }
 
@@ -152,39 +172,39 @@ package intcode {
     override val length: Int = 0
     override type Args = Unit
     override def getArgs(machine: Machine): Args = ()
-    override def updateMachineState(machine: Machine, args: Args) = machine
+    override def updateMachineState(machine: Machine, args: Args) = (machine, None)
   }
 
   abstract class ArithmeticOp(op: (Code, Code) => Code) extends TernaryOp {
-    override def updateMachineState(machine: Machine, args: Args): Machine = {
+    override def updateMachineState(machine: Machine, args: Args): (Machine, Option[IP]) = {
       val (from1Addr, from2Addr, toAddr) = args
       val result = op(machine.readMem(from1Addr), machine.readMem(from2Addr))
 
-      machine.writeMem(toAddr, result)
+      (machine.writeMem(toAddr, result), None)
     }
   }
 
   abstract class JumpOp(cmpOp: Code => Boolean) extends BinaryOp {
-    override def updateMachineState(machine: Machine, args: Args): Machine = {
+    override def updateMachineState(machine: Machine, args: Args): (Machine, Option[IP]) = {
       val (fromAddr, toAddr) = args
       val cmpResult = cmpOp(machine.readMem(fromAddr))
 
       if (cmpResult) {
-        val nextIP = machine.readMem(toAddr) - length
-        machine.copy(instructionPointer = nextIP)
+        val nextIP = machine.readMem(toAddr)
+        (machine, Some(nextIP))
       } else {
-        machine
+        (machine, None)
       }
     }
   }
 
   abstract class CmpOp(cmpOp: (Code, Code) => Boolean) extends TernaryOp {
-    override def updateMachineState(machine: Machine, args: Args): Machine = {
+    override def updateMachineState(machine: Machine, args: Args): (Machine, Option[IP]) = {
       val (from1Addr, from2Addr, toAddr) = args
       val cmpResult = cmpOp(machine.readMem(from1Addr), machine.readMem(from2Addr))
 
       val valueResult = if (cmpResult) 1 else 0
-      machine.writeMem(toAddr, valueResult)
+      (machine.writeMem(toAddr, valueResult), None)
     }
   }
 
