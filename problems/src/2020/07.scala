@@ -35,11 +35,11 @@ object problem07 extends baseProblem {
   }
 
   private def calcBagsThatAreContainedInTheBag(myBag: Color, contentMap: ContentMap): Int = {
-    val children = contentMap.getOrElse(myBag, Seq.empty)
-    if( children.isEmpty ) 0
+    val bagsInside = contentMap.getOrElse(myBag, Seq.empty)
+    if( bagsInside.isEmpty ) 0
     else {
-      val childrenBags = children.map { case Content(n, color) => n + n * calcBagsThatAreContainedInTheBag(color, contentMap) }
-      childrenBags.sum
+      val bagNums = bagsInside.map { case Content(n, color) => n + n * calcBagsThatAreContainedInTheBag(color, contentMap) }
+      bagNums.sum
     }
   }
 
