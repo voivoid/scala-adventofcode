@@ -4,8 +4,8 @@ package object parse {
   import fastparse._
 
   def digit[_: P] = P(CharIn("0-9"))
-  def num[_: P] = P(digit.repX(1).!.map(_.toInt))
-  def alpha[_: P] = CharIn("a-zA-Z").!.map(_.head)
+  def num[_: P] = P((("+" | "-").? ~~ digit.repX(1)).!.map(_.toInt))
+  def alpha[_: P] = P(CharIn("a-zA-Z").!.map(_.head))
 
   def parseValue[Result](input: String, parser: P[_] => P[Result]): Result = {
     val parsed = parse(input, parser)

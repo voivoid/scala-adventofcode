@@ -6,14 +6,14 @@ object problem07 extends baseProblem {
   override def solve1(input: Input): Int = {
     val bags = input.getLines().map(parseBagInfo)
     val colorMap = makeInsideColorToOutsideColorMap(bags)
-    calcBagsThatContainTheBag(Set(myBag), Set.empty, colorMap)
+    calcBagsThatContainOtherBags(Set(myBagColor), Set.empty, colorMap)
   }
 
   override def solve2(input: Input): Int = {
     val bags = input.getLines().map(parseBagInfo)
     val contentMap = makeColorToContentMap(bags)
 
-    calcBagsThatAreContainedInTheBag(myBag, contentMap)
+    calcBagsThatAreContainedInTheBag(myBagColor, contentMap, Map.empty)._1
   }
 
   private type Color = String
@@ -23,23 +23,30 @@ object problem07 extends baseProblem {
   private case class Content(num: Int, color: Color)
   private case class BagInfo(color: Color, contents: Seq[Content])
 
-  private def myBag = "shiny gold"
+  private def myBagColor = "shiny gold"
 
-  private def calcBagsThatContainTheBag(colorsToVisit: Set[Color], visited: Set[Color], colorMap: ColorMap): Int = {
-    if (colorsToVisit.isEmpty) visited.size - 1
+  private def calcBagsThatContainOtherBags(bagColorsToCheck: Set[Color], checkedColors: Set[Color], colorMap: ColorMap): Int = {
+    if (bagColorsToCheck.isEmpty) checkedColors.size - 1
     else {
-      val nextColors = colorsToVisit.flatMap(colorMap.withDefaultValue(Set.empty))
+      val nextColors = bagColorsToCheck.flatMap(colorMap.withDefaultValue(Set.empty))
 
-      calcBagsThatContainTheBag(nextColors.diff(visited), visited.union(colorsToVisit), colorMap)
+      calcBagsThatContainOtherBags(nextColors.diff(checkedColors), checkedColors.union(bagColorsToCheck), colorMap)
     }
   }
 
-  private def calcBagsThatAreContainedInTheBag(myBag: Color, contentMap: ContentMap): Int = {
-    val bagsInside = contentMap.getOrElse(myBag, Seq.empty)
-    if( bagsInside.isEmpty ) 0
-    else {
-      val bagNums = bagsInside.map { case Content(n, color) => n + n * calcBagsThatAreContainedInTheBag(color, contentMap) }
-      bagNums.sum
+  private def calcBagsThatAreContainedInTheBag(
+    theBag: Color,
+    contentMap: ContentMap,
+    bagsCache: Map[Color, Int]
+  ): (Int, Map[Color, Int]) = {
+    val bagContents = contentMap.getOrElse(theBag, Seq.empty)
+
+    bagContents.foldLeft((0, bagsCache)) { case ((bagsNumAcc, cache), Content(bagsNum, color)) =>
+      val (bagsNumInside, updatedCache) =
+        if (cache.contains(color)) (cache(color), cache)
+        else calcBagsThatAreContainedInTheBag(color, contentMap, cache)
+
+      (bagsNumAcc + bagsNum + bagsNum * bagsNumInside, updatedCache.updated(color, bagsNumInside))
     }
   }
 
@@ -47,7 +54,7 @@ object problem07 extends baseProblem {
     def insertBagColors(initialMap: ColorMap, bag: BagInfo): ColorMap = {
       bag.contents.foldLeft(initialMap) { case (mapAcc, Content(_, color)) =>
         mapAcc.updatedWith(color) {
-          case None => Some(Set(bag.color))
+          case None           => Some(Set(bag.color))
           case Some(valueSet) => Some(valueSet + bag.color)
         }
       }
@@ -57,8 +64,8 @@ object problem07 extends baseProblem {
   }
 
   private def makeColorToContentMap(bags: Iterator[BagInfo]): ContentMap = {
-    bags.foldLeft(Map.empty[Color, Seq[Content]]) {
-      case (mapAcc, BagInfo(color, contents)) => mapAcc.updated(color, contents)
+    bags.foldLeft(Map.empty[Color, Seq[Content]]) { case (mapAcc, BagInfo(color, contents)) =>
+      mapAcc.updated(color, contents)
     }
   }
 
