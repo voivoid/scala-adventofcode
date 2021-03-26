@@ -52,11 +52,9 @@ object problem07 extends baseProblem {
 
   private def makeInsideColorToOutsideColorMap(bags: Iterator[BagInfo]): ColorMap = {
     def insertBagColors(initialMap: ColorMap, bag: BagInfo): ColorMap = {
+      val initMapValue = Some(Set.empty[Color])
       bag.contents.foldLeft(initialMap) { case (mapAcc, Content(_, color)) =>
-        mapAcc.updatedWith(color) {
-          case None           => Some(Set(bag.color))
-          case Some(valueSet) => Some(valueSet + bag.color)
-        }
+        mapAcc.updatedWith(color)(_.orElse(initMapValue).map(_ + bag.color))
       }
     }
 

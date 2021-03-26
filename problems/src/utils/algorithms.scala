@@ -138,11 +138,9 @@ package object algorithms {
 
   implicit class IteratorToMultimap[A, B](iter: Iterator[(A, B)]) {
     def toMultimap: Map[A, Set[B]] = {
+      val initMapValue = Some(Set.empty[B])
       iter.foldLeft(Map.empty[A, Set[B]]) { case (map, (k, v)) =>
-        map.updatedWith(k) {
-          case Some(vs) => Some(vs + v)
-          case None     => Some(Set(v))
-        }
+        map.updatedWith(k)(_.orElse(initMapValue).map(_ + v))
       }
     }
 
