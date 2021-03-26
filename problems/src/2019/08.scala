@@ -17,7 +17,7 @@ object problem08 extends baseProblem {
     val height = 6
     val pixels = decodePixels(input, width, height)
 
-    decodeChars(pixels, width)
+    adventOfCode.utils.ocr.decodeChars(pixels, width)
   }
 
   def decodePixels(input: Input, width: Int, height: Int): Seq[Char] = {
@@ -32,147 +32,9 @@ object problem08 extends baseProblem {
     input.iterator.grouped(digitsPerLayer)
   }
 
-  private def decodeChars(pixels: Pixels, width: Int): String = {
-    val charWidth = 5
-    val charsNum = width / charWidth
-
-    val indexedPixels = pixels.zipWithIndex
-
-    val charsPixels = (0 until charsNum).map(charN => {
-      val fromPixelIndex = charN * charWidth
-      val toPixelindex = fromPixelIndex + charWidth
-      val pixelRange = fromPixelIndex until toPixelindex
-
-      indexedPixels.withFilter { case (_, pixelIndex) => pixelRange.contains(pixelIndex % width) }.map(_._1)
-    })
-
-    charsPixels.map(pixelsToCharMap).mkString
-  }
-
   private def calcPixelColor(layers: Seq[Char]): Char = {
     val TransparentPixel = '2'
     layers.find(_ != TransparentPixel).getOrElse(sys.error("all pixels are transparent"))
-  }
-
-  private type Pixels = Seq[Char]
-
-  private def pixelsToCharMap: Map[Seq[Char], Char] = {
-    val * = '1'
-    val - = '0'
-
-    // format: off
-
-    val chars: Seq[(Seq[Char], Char)] = Seq(
-
-      Seq( -, *, *, -, -,
-           *, -, -, *, -,
-           *, -, -, *, -,
-           *, *, *, *, -,
-           *, -, -, *, -,
-           *, -, -, *, - ) -> 'A',
-
-      Seq( *, *, *, -, -,
-           *, -, -, *, -,
-           *, *, *, -, -,
-           *, -, -, *, -,
-           *, -, -, *, -,
-           *, *, *, -, - ) -> 'B',
-
-      Seq( -, *, *, -, -,
-           *, -, -, *, -,
-           *, -, -, -, -,
-           *, -, -, -, -,
-           *, -, -, *, -,
-           -, *, *, -, -) -> 'C',
-
-      Seq( *, *, *, *, -,
-           *, -, -, -, -,
-           *, *, *, -, -,
-           *, -, -, -, -,
-           *, -, -, -, -,
-           *, *, *, *, -) -> 'E',
-
-      Seq( *, *, *, *, -,
-           *, -, -, -, -,
-           *, *, *, -, -,
-           *, -, -, -, -,
-           *, -, -, -, -,
-           *, -, -, -, - ) -> 'F',
-
-      Seq( -, *, *, -, -,
-           *, -, -, *, -,
-           *, -, -, -, -,
-           *, -, *, *, -,
-           *, -, -, *, -,
-           -, *, *, *, -) -> 'G',
-
-      Seq( *, -, -, *, -,
-           *, -, -, *, -,
-           *, *, *, *, -,
-           *, -, -, *, -,
-           *, -, -, *, -,
-           *, -, -, *, - ) -> 'H',
-
-      Seq( -, -, *, *, -,
-           -, -, -, *, -,
-           -, -, -, *, -,
-           -, -, -, *, -,
-           *, -, -, *, -,
-           -, *, *, -, - ) -> 'J',
-
-      Seq( *, -, -, *, -,
-           *, -, *, -, -,
-           *, *, -, -, -,
-           *, -, *, -, -,
-           *, -, *, -, -,
-           *, -, -, *, -) -> 'K',
-
-      Seq( *, -, -, -, -,
-           *, -, -, -, -,
-           *, -, -, -, -,
-           *, -, -, -, -,
-           *, -, -, -, -,
-           *, *, *, *, - ) -> 'L',
-
-      Seq( *, *, *, -, -,
-           *, -, -, *, -,
-           *, -, -, *, -,
-           *, *, *, -, -,
-           *, -, -, -, -,
-           *, -, -, -, -) -> 'P',
-
-      Seq( *, *, *, -, -,
-           *, -, -, *, -,
-           *, -, -, *, -,
-           *, *, *, -, -,
-           *, -, *, -, -,
-           *, -, -, *, -) -> 'R',
-
-      Seq( *, -, -, *, -,
-           *, -, -, *, -,
-           *, -, -, *, -,
-           *, -, -, *, -,
-           *, -, -, *, -,
-           -, *, *, -, -) -> 'U',
-
-      Seq( *, -, -, -, *,
-           *, -, -, -, *,
-           -, *, -, *, -,
-           -, -, *, -, -,
-           -, -, *, -, -,
-           -, -, *, -, - ) -> 'Y',
-
-      Seq( *, *, *, *, -,
-           -, -, -, *, -,
-           -, -, *, -, -,
-           -, *, -, -, -,
-           *, -, -, -, -,
-           *, *, *, *, - ) -> 'Z'
-    )
-
-    // format: on
-
-    chars.toMap
   }
 
 }
