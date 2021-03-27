@@ -34,7 +34,7 @@ object problem05 extends baseProblem {
   @scala.annotation.tailrec
   private def reducePolymer(polymer: PolymerZipper): PolymerZipper = polymer match {
     case Zipper(a, b, _*) if hasOppositePolarity(a, b) => {
-      val reduced = polymer.remove.remove
+      val reduced = polymer.removeCurrent.removeCurrent
       val prevReduced = if (reduced.hasPrev) reduced.prev else reduced
       reducePolymer(prevReduced)
     }
