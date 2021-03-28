@@ -26,7 +26,7 @@ object problem05 extends baseProblem {
   private val vowels = "aeiou"
   private val forbiddenPairs = List(('a', 'b'), ('c', 'd'), ('p', 'q'), ('x', 'y'))
 
-  import adventOfCode.utils.algorithms.{IteratorSlidingTuple, CollectionSlidingTuple}
+  import adventOfCode.utils.algorithms.{IteratorSlidingTuple, IterableSlidingTuple}
 
   private def hasThreeVowels(str: List[Char]): Boolean = str.count(c => vowels.contains(c)) >= 3
 
