@@ -2,15 +2,15 @@ package adventOfCode.utils
 
 package object intcode {
 
-  type Code = Int
+  type Code = Long
   type Memory = Vector[Code]
   type In = List[Code]
   type Out = List[Code]
-  type IP = Int
+  type IP = Code
 
   def parseMemory(source: scala.io.Source): Memory = {
     import adventOfCode.utils.algorithms.IteratorSplit
-    source.splitBy(',').map(_.toInt).toVector
+    source.splitBy(',').map(_.toLong).toVector
   }
 
   def run(memory: Memory, input: In = List.empty): Machine = {
@@ -19,7 +19,7 @@ package object intcode {
   }
 
   def makeMachine(memory: Memory, input: In = List.empty): Machine = {
-    Machine(memory, 0, input, List.empty)
+    Machine(memory, Map.empty, 0, input, List.empty, 0)
   }
 
   def resumeMachine(machine: Machine, input: In): Machine = {
@@ -49,16 +49,17 @@ package object intcode {
     Ops.find(_.codeId == currentOpCode).getOrElse(sys.error("unexpected opcode"))
   }
 
-  private val Ops = Set(AddOp, MulOp, InputOp, OutputOp, TJmp, FJmp, Less, Equals, HaltOp)
+  private val Ops = Set(AddOp, MulOp, InputOp, OutputOp, TJmp, FJmp, Less, Equals, RelBase, HaltOp)
 }
 
 package intcode {
-  case class Machine(memory: Memory, instructionPointer: IP, input: In, output: Out) {
-    def getCurrentOp = memory(instructionPointer)
+  case class Machine(memory: Memory, extraMem: Map[Code, Code], instructionPointer: IP, input: In, output: Out, relativeBase: Code) {
+    def getCurrentOp = readMem(instructionPointer)
     def getOpArg(argN: Int): Code = {
       getParameterMode(argN) match {
-        case 0 => memory(instructionPointer + argN)
-        case 1 => instructionPointer + argN
+        case 0 => readMem(instructionPointer + argN) // position mode
+        case 1 => instructionPointer + argN // immediate mode
+        case 2 => relativeBase + readMem(instructionPointer + argN) // relative mode
         case _ => sys.error("unexpected parameter mode")
       }
     }
@@ -66,11 +67,26 @@ package intcode {
     def getParameterMode(argN: Int): Int = {
       import adventOfCode.utils.algorithms.powInt
       val opCode = getCurrentOp
-      opCode / powInt(10, argN + 1) % 10
+      opCode.toInt / powInt(10, argN + 1) % 10
     }
 
-    def readMem(addr: Code): Code = memory(addr)
-    def writeMem(addr: Code, value: Code): Machine = copy(memory = memory.updated(addr, value))
+    def readMem(from: Code): Code = {
+      val intAddr = from.toInt
+      if (memory.indices.contains(intAddr)) {
+        memory(intAddr)
+      } else {
+        extraMem.getOrElse(from, 0)
+      }
+    }
+
+    def writeMem(to: Code, value: Code): Machine = {
+      val intAddr = to.toInt
+      if (memory.indices.contains(intAddr)) {
+        copy(memory = memory.updated(intAddr, value))
+      } else {
+        copy(extraMem = extraMem.updated(to, value))
+      }
+    }
 
     def waitsForInput: Boolean = getCurrentOp == InputOp.codeId
     def halted: Boolean = getCurrentOp == HaltOp.codeId
@@ -166,6 +182,16 @@ package intcode {
     override val codeId: Code = 8
   }
 
+  object RelBase extends UnaryOp {
+    override val codeId: Code = 9
+
+    override def updateMachineState(machine: Machine, fromAddr: Code): (Machine, Option[IP]) = {
+      val relBase = machine.readMem(fromAddr)
+
+      (machine.copy(relativeBase = machine.relativeBase + relBase), None)
+    }
+  }
+
   object HaltOp extends Op {
     override val codeId: Code = 99
 
@@ -203,7 +229,7 @@ package intcode {
       val (from1Addr, from2Addr, toAddr) = args
       val cmpResult = cmpOp(machine.readMem(from1Addr), machine.readMem(from2Addr))
 
-      val valueResult = if (cmpResult) 1 else 0
+      val valueResult = if (cmpResult) 1L else 0L
       (machine.writeMem(toAddr, valueResult), None)
     }
   }

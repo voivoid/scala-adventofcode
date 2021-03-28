@@ -4,18 +4,23 @@ package year2019
 object problem07 extends baseProblem {
 
   import adventOfCode.utils.intcode._
+  import scala.collection.immutable.NumericRange
 
   override def solve1(input: Input): Signal = {
-    solve(input, phaseSettings = 0 to 4, calcSimpleSignal)
+    solve(input, phaseSettings = 0L to 4L, calcSimpleSignal)
   }
 
   override def solve2(input: Input): Signal = {
-    solve(input, phaseSettings = 5 to 9, calcLoopedSignal)
+    solve(input, phaseSettings = 5L to 9L, calcLoopedSignal)
   }
 
-  private type Signal = Int
+  private type Signal = Long
 
-  private def solve(input: Input, phaseSettings: Range, calcSignal: (IndexedSeq[Int], Memory) => Signal): Signal = {
+  private def solve(
+    input: Input,
+    phaseSettings: NumericRange.Inclusive[Long],
+    calcSignal: (IndexedSeq[Signal], Memory) => Signal
+  ): Signal = {
     val memory = parseMemory(input)
     val settingsPermutations = phaseSettings.permutations.iterator
     val signals = settingsPermutations.map(settings => calcSignal(settings, memory))
@@ -23,8 +28,8 @@ object problem07 extends baseProblem {
     signals.max
   }
 
-  private def calcSimpleSignal(phaseSettings: IndexedSeq[Int], memory: Memory): Signal = {
-    val initSignal = 0
+  private def calcSimpleSignal(phaseSettings: IndexedSeq[Signal], memory: Memory): Signal = {
+    val initSignal = 0L
     phaseSettings.foldLeft(initSignal) {
       case (outputSignal, phaseSetting) => {
         val machine = run(memory, List(phaseSetting, outputSignal))
@@ -33,13 +38,13 @@ object problem07 extends baseProblem {
     }
   }
 
-  private def calcLoopedSignal(phaseSettings: IndexedSeq[Int], memory: Memory): Signal = {
+  private def calcLoopedSignal(phaseSettings: IndexedSeq[Signal], memory: Memory): Signal = {
     val amps = phaseSettings.map(setting => {
       val machine = makeMachine(memory, List(setting))
       runMachine(machine)
     })
 
-    val initSignal = 0
+    val initSignal = 0L
     loopAmps(initSignal, amps.toList)
   }
 

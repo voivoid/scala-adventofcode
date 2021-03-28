@@ -35,8 +35,7 @@ object problem09 extends baseProblem {
 
     if (marblesLeft == 0) {
       scoresMap
-    }
-    else {
+    } else {
       val (updatedMarbles, score) = calcNextTurnMarbles(nextMarble, marbles)
 
       val updatedScoresMap = if (score != 0) {
