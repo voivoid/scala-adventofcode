@@ -19,6 +19,10 @@ package algorithms {
 
 package object algorithms {
 
+  def gcd(a: Int, b: Int): Int = {
+    if (b == 0) a else gcd(b, a % b)
+  }
+
   def powInt(n: Int, pow: Int): Int = {
     require(pow >= 0)
     if (pow == 0) 1
@@ -33,6 +37,12 @@ package object algorithms {
       assert(iterator.hasNext)
       val first = iterator.next()
       iterator.foldLeft(first) { case (_, v) => v }
+    }
+  }
+
+  implicit class IteratorNth[A](iterator: Iterator[A]) {
+    def nth(n: Int): A = {
+      iterator.take(n).last
     }
   }
 
