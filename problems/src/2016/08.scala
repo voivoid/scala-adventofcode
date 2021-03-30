@@ -14,10 +14,11 @@ object problem08 extends baseProblem {
 
   override def solve2(input: Input): String = {
     val width = 50
-    val finalGrid = runInstructions(input, width, height = 6)
+    val height = 6
+    val finalGrid = runInstructions(input, width, height)
 
     val pixels = finalGrid.flatten.toIndexedSeq
-    adventOfCode.utils.ocr.decodeChars(pixels, width)
+    adventOfCode.utils.ocr.decodeChars(pixels, width, height, charWidth = 5)
   }
 
   private def runInstructions(input: Input, width: Int, height: Int): Grid = {

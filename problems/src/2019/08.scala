@@ -17,7 +17,7 @@ object problem08 extends baseProblem {
     val height = 6
     val pixels = decodePixels(input, width, height)
 
-    adventOfCode.utils.ocr.decodeChars(pixels, width)
+    adventOfCode.utils.ocr.decodeChars(pixels, width, height, charWidth = 5)
   }
 
   def decodePixels(input: Input, width: Int, height: Int): Seq[Char] = {

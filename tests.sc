@@ -114,6 +114,9 @@ trait AppTests
 
     check(runProblem("2018_09_1")(), "398730")
     check(runProblem("2018_09_2")(), "3349635509")
+
+    check(runProblem("2018_10_1")(), "FBHKLEAG")
+    check(runProblem("2018_10_2")(), "10009")
   }
 
   def test2019() = T.command {

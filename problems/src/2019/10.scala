@@ -20,10 +20,12 @@ object problem10 extends baseProblem {
     val centerCoord = asteroids.maxBy(countVisibleAsteroids(_, asteroids))
 
     // sorted clockwise ( from 90° to -270° )
-    val asteroidsSortedByAngle = groupAsteroidsByAngle(centerCoord, asteroids).sortBy ( _.angle )(Ordering[Double].reverse)
+    val asteroidsSortedByAngle = groupAsteroidsByAngle(centerCoord, asteroids).sortBy(_.angle)(Ordering[Double].reverse)
 
-    val asteroidsOrderedByDestruction =Iterator.from(0)
-      .flatMap(fullRotationIndex => asteroidsSortedByAngle.map( _.asteroids.lift(fullRotationIndex))).flatten
+    val asteroidsOrderedByDestruction = Iterator
+      .from(0)
+      .flatMap(fullRotationIndex => asteroidsSortedByAngle.map(_.asteroids.lift(fullRotationIndex)))
+      .flatten
 
     val finalAsteroid = asteroidsOrderedByDestruction.nth(lastAsteroid) + centerCoord
     finalAsteroid.x * 100 + finalAsteroid.y
@@ -61,7 +63,8 @@ object problem10 extends baseProblem {
 
     shiftedAsteroids
       .groupBy(closestVisibleCoord)
-      .iterator.map {
+      .iterator
+      .map {
         case (asteroid, sameAngleAsteroids) => {
           // negate y so upper asteroids will have positive angle
           val angle = math.toDegrees(math.atan2(-asteroid.y.toDouble, asteroid.x.toDouble))
@@ -72,10 +75,11 @@ object problem10 extends baseProblem {
 
           AsteroidsGroupedByAngle(angle2, sortAsteroidsByDistance(sameAngleAsteroids))
         }
-      }.toVector
+      }
+      .toVector
   }
 
-  private def sortAsteroidsByDistance( asteroid: Seq[Coord]): Seq[Coord] = {
+  private def sortAsteroidsByDistance(asteroid: Seq[Coord]): Seq[Coord] = {
     asteroid.sortBy(p => p.x.abs + p.y.abs)
   }
 
