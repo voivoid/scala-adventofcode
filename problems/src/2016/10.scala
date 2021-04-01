@@ -10,11 +10,9 @@ object problem10 extends baseProblem {
   def solve1(input: Input, val1: Int, val2: Int): Int = {
     val (botsMap, _) = runInstructions(input)
 
+    val valuesToFind = Set(val1, val2)
     val resultBot = botsMap
-      .find {
-        case (_, List(a, b)) => (a == val1 && b == val2) || (a == val2 && b == val1)
-        case _               => false
-      }
+      .find { _._2 == valuesToFind }
       .getOrElse(sys.error("no solution"))
 
     resultBot._1
@@ -50,13 +48,13 @@ object problem10 extends baseProblem {
       case Nil => (botsMap, outputsMap)
 
       case BotInstruction(bot, lowDestination, highDestination) :: restInstructions => {
-        val List(v1, v2) = botsMap(bot): @unchecked
+        val values = botsMap(bot)
+        assert(values.size == 2)
 
-        val min = v1 min v2
-        val max = v1 max v2
+        val (low, high) = (values.min, values.max)
 
-        val ii1 = InputInstruction(min, lowDestination)
-        val ii2 = InputInstruction(max, highDestination)
+        val ii1 = InputInstruction(low, lowDestination)
+        val ii2 = InputInstruction(high, highDestination)
 
         runInstructions(ii1 :: ii2 :: restInstructions, botInstructions, botsMap, outputsMap)
       }
@@ -64,7 +62,7 @@ object problem10 extends baseProblem {
       case InputInstruction(value, destination) :: restInstructions =>
         destination match {
           case BotDestination(index) => {
-            val updatedBotsMap = botsMap.updatedWith(index)(_.orElse(Some(List.empty)).map(value :: _))
+            val updatedBotsMap = botsMap.updatedWith(index)(_.orElse(Some(Set.empty[Value])).map(_.incl(value)))
 
             val updatedReadyInstructions = if (updatedBotsMap(index).size == 2) {
               botInstructions(index) :: restInstructions
@@ -86,7 +84,7 @@ object problem10 extends baseProblem {
   private type Value = Int
   private type Index = Int
   private type BotInstructions = Map[Index, BotInstruction]
-  private type BotValues = Map[Index, List[Value]]
+  private type BotValues = Map[Index, Set[Value]]
   private type OutputValues = Map[Index, Value]
 
   private sealed trait Destination
