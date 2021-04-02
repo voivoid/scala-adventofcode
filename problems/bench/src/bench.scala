@@ -2,8 +2,8 @@ import org.scalameter.api._
 
 object ProblemBenchmark extends Bench.LocalTime {
   // TODO: read from command line args
-  val year = 2017
-  val problem = "10"
+  val year = 2015
+  val problem = "11"
   val part = 2
 
   val inputFile = adventOfCode.problems.tests.Input.getURL(s"${year}_${problem}")
