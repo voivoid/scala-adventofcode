@@ -2,7 +2,7 @@ import org.scalameter.api._
 
 object ProblemBenchmark extends Bench.LocalTime {
   // TODO: read from command line args
-  val year = 2015
+  val year = 2016
   val problem = "11"
   val part = 2
 

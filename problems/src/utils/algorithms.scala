@@ -3,6 +3,7 @@ package adventOfCode.utils
 import scala.collection.{AbstractView, BuildFrom}
 import scala.collection.generic.IsSeq
 import scala.language.implicitConversions
+import scala.collection.immutable.MultiSet
 
 package algorithms {
   class IterableSlidingTuple[Repr, S <: IsSeq[Repr]](coll: Repr, seq: S) {
@@ -31,6 +32,12 @@ package object algorithms {
 
   implicit def IterableSlidingTuple[Repr](coll: Repr)(implicit seq: IsSeq[Repr]): IterableSlidingTuple[Repr, seq.type] =
     new IterableSlidingTuple(coll, seq)
+
+  implicit class MultiSetExclSeq[A](multiset: MultiSet[A]) {
+    def --(s: Seq[A]): MultiSet[A] = {
+      s.foldLeft(multiset)(_ - _)
+    }
+  }
 
   implicit class IteratorLast[A](iterator: Iterator[A]) {
     def last: A = {

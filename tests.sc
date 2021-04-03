@@ -69,6 +69,11 @@ trait AppTests
     check(runProblem("2016_10_2")(), "133163")
   }
 
+  def test2016_11_20() = T.command {
+    check(runProblem("2016_11_1")(), "31")
+    check(runProblem("2016_11_2")(), "55")
+  }
+
   def test2017_1_10() = T.command {
     check(runProblem("2017_01_1")(), "1034")
     check(runProblem("2017_01_2")(), "1356")
@@ -99,6 +104,9 @@ trait AppTests
 
     check(runProblem("2017_10_1")(), "826")
     check(runProblem("2017_10_2")(), "d067d3f14d07e09c2e7308c3926605c4")
+  }
+
+  def test2017_11_20() = T.command {
   }
 
   def test2018_1_10() = T.command {
@@ -133,6 +141,9 @@ trait AppTests
     check(runProblem("2018_10_2")(), "10009")
   }
 
+  def test2018_11_20() = T.command {
+  }
+
   def test2019_1_10() = T.command {
     check(runProblem("2019_01_1")(), "3231195")
     check(runProblem("2019_01_2")(), "4843929")
@@ -163,6 +174,9 @@ trait AppTests
 
     check(runProblem("2019_10_1")(), "303")
     check(runProblem("2019_10_2")(), "408")
+  }
+
+  def test2019_11_20() = T.command {
   }
 
   def test2020_1_10() = T.command {
@@ -197,15 +211,27 @@ trait AppTests
     check(runProblem("2020_10_2")(), "64793042714624")
   }
 
+  def test2020_11_20() = T.command {
+  }
+
   def testAll() = T.command {
     test2015_1_10()()
     test2015_11_20()()
 
     test2016_1_10()()
+    test2016_11_20()()
+
     test2017_1_10()()
+    test2017_11_20()()
+
     test2018_1_10()()
+    test2018_11_20()()
+
     test2019_1_10()()
+    test2019_11_20()()
+
     test2020_1_10()()
+    test2020_11_20()()
   }
 
   protected def runProblem(input: String): mill.define.Task[(mill.api.Logger, String, String)]

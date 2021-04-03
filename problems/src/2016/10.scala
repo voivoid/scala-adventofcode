@@ -24,9 +24,9 @@ object problem10 extends baseProblem {
   }
 
   private def runInstructions(input: Input): (BotValues, OutputValues) = {
-    val (inputInstructions, botInsructions) = input.getLines().map(parseInstruction).toList.partition {
-      case _: InputInstruction => true
-      case _: BotInstruction   => false
+    val (inputInstructions, botInsructions) = input.getLines().map(parseInstruction).toList.partitionMap {
+      case ii: InputInstruction => Left(ii)
+      case bi: BotInstruction   => Right(bi)
     }
 
     val botInstructionsMap = botInsructions.iterator

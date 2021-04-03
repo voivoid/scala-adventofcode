@@ -91,7 +91,7 @@ object problem11 extends baseProblem {
           nextChar(postfixBaseChar)
 
       val (newPostfix, incRest) = simpleReversedPostfix(newPostfixBaseChar)
-      newPostfix ++ (if (incRest) incPassword(rest) else rest)
+      newPostfix ::: (if (incRest) incPassword(rest) else rest)
     } else {
       reversedPostfixStartingFrom('a')
     }
