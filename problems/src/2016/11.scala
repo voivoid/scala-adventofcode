@@ -54,7 +54,7 @@ object problem11 extends baseProblem {
 
     val materials = chips.iterator.map(_._1)
 
-    val devPairs = materials.map( material => DevPair(chipsMap(material), gensMap(material)) )
+    val devPairs = materials.map(material => DevPair(chipsMap(material), gensMap(material)))
     devPairs.to(MultiSet)
   }
 
@@ -85,7 +85,7 @@ object problem11 extends baseProblem {
     def updateOneDevice(d: DevPair): DevPair = d match {
       case DevPair(CurrentFloor, floor) => DevPair(nextFloor, floor)
       case DevPair(floor, CurrentFloor) => DevPair(floor, nextFloor)
-      case _ => sys.error("unexpected")
+      case _                            => sys.error("unexpected")
     }
 
     perm match {
