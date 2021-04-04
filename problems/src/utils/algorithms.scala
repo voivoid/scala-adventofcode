@@ -15,7 +15,6 @@ package algorithms {
       })
     }
   }
-
 }
 
 package object algorithms {

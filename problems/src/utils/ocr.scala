@@ -7,7 +7,7 @@ package object ocr {
 
     val indexedPixels = pixels.zipWithIndex
 
-    val charsPixels = (0 until charsNum).map(charN => {
+    val charsPixels = (0 until charsNum).iterator.map(charN => {
       val fromPixelIndex = charN * charWidth
       val toPixelindex = fromPixelIndex + charWidth
       val pixelRange = fromPixelIndex until toPixelindex
