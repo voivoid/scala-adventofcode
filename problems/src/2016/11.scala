@@ -22,9 +22,9 @@ object problem11 extends baseProblem {
   private type Material = String
   private type FloorNum = Int
 
-  private sealed trait Device
-  private case class Chip(material: Material) extends Device
-  private case class Gen(material: Material) extends Device
+  private[problems] sealed trait Device
+  private[problems] case class Chip(material: Material) extends Device
+  private[problems] case class Gen(material: Material) extends Device
 
   // Since all device pairs are interchangeable there is no need to distinct one pair
   // from another by their material. It will allow to greatly reduce a number of possible move combinations
@@ -171,7 +171,7 @@ object problem11 extends baseProblem {
     }
   }
 
-  private def parseFloor(s: String): (FloorNum, Seq[Device]) = {
+  private[problems] def parseFloor(s: String): (FloorNum, Seq[Device]) = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, alpha}
@@ -195,26 +195,6 @@ object problem11 extends baseProblem {
     def parser[_: P] = P("The" ~ floorNum ~ "floor" ~ "contains" ~ devices ~ ".")
 
     parseValue(s, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseFloor("The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.")) {
-      case (1, Seq(Chip("hydrogen"), Chip("lithium"))) =>
-    }
-
-    assertMatch(parseFloor("The second floor contains a hydrogen generator.")) { case (2, Seq(Gen("hydrogen"))) =>
-    }
-
-    assertMatch(parseFloor("The fourth floor contains nothing relevant.")) { case (4, Seq()) =>
-    }
-
-    assertMatch(
-      parseFloor(
-        "The third floor contains a thulium generator, a thulium-compatible microchip, a plutonium generator, and a strontium generator."
-      )
-    ) { case (3, Seq(Gen("thulium"), Chip("thulium"), Gen("plutonium"), Gen("strontium"))) => }
   }
 
 }

@@ -29,7 +29,9 @@ object year2017_07 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+      assertMatch(parseTower("pbga (66)")) { case Tower("pbga", 66, Seq(), 66) => }
+      assertMatch(parseTower("fwft (72) -> ktlj, cntj, xhth")) { case Tower("fwft", 72, Seq("ktlj", "cntj", "xhth"), 72) => }
     }
   }
 }

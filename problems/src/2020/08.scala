@@ -56,7 +56,7 @@ object problem08 extends baseProblem {
     instructions.updated(ip, instruction.patched.get)
   }
 
-  private case class State(ip: IP, acc: Accumulator) {
+  private[problems] case class State(ip: IP, acc: Accumulator) {
     override def hashCode(): Int = ip
     override def equals(obj: Any): Boolean = obj match {
       case State(ip, _) => this.ip == ip
@@ -66,23 +66,23 @@ object problem08 extends baseProblem {
     def isTerminated(instructions: Instructions): Boolean = ip < 0 || ip >= instructions.size
   }
 
-  private sealed trait Instruction {
+  private[problems] sealed trait Instruction {
     def nextState(state: State): State
     def patched: Option[Instruction]
     def isPatchable = patched.isDefined
   }
 
-  private case class Nop(arg: Int) extends Instruction {
+  private[problems] case class Nop(arg: Int) extends Instruction {
     override def nextState(state: State): State = state.copy(ip = state.ip + 1)
     override def patched: Option[Instruction] = Some(Jmp(arg))
   }
 
-  private case class Acc(arg: Int) extends Instruction {
+  private[problems] case class Acc(arg: Int) extends Instruction {
     override def nextState(state: State): State = state.copy(ip = state.ip + 1, acc = state.acc + arg)
     override def patched: Option[Instruction] = None
   }
 
-  private case class Jmp(arg: Int) extends Instruction {
+  private[problems] case class Jmp(arg: Int) extends Instruction {
     override def nextState(state: State): State = state.copy(ip = state.ip + arg)
     override def patched: Option[Instruction] = Some(Nop(arg))
   }
@@ -95,7 +95,7 @@ object problem08 extends baseProblem {
     instructions(state.ip).nextState(state)
   }
 
-  private def parseInstruction(str: String): Instruction = {
+  private[problems] def parseInstruction(str: String): Instruction = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, num}
@@ -109,14 +109,6 @@ object problem08 extends baseProblem {
     def parser[_: P] = P(op ~ num).map { case (op, arg) => op(arg) }
 
     parseValue(str, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseInstruction("nop +0")) { case Nop(0) => }
-    assertMatch(parseInstruction("acc -99")) { case Acc(-99) => }
-    assertMatch(parseInstruction("jmp +4")) { case Jmp(4) => }
   }
 
 }

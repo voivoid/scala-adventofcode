@@ -20,8 +20,8 @@ object problem07 extends baseProblem {
   private type ColorMap = Map[Color, Set[Color]]
   private type ContentMap = Map[Color, Seq[Content]]
 
-  private case class Content(num: Int, color: Color)
-  private case class BagInfo(color: Color, contents: Seq[Content])
+  private[problems] case class Content(num: Int, color: Color)
+  private[problems] case class BagInfo(color: Color, contents: Seq[Content])
 
   private def myBagColor = "shiny gold"
 
@@ -67,7 +67,7 @@ object problem07 extends baseProblem {
     }
   }
 
-  private def parseBagInfo(str: String): BagInfo = {
+  private[problems] def parseBagInfo(str: String): BagInfo = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, alpha, num}
@@ -81,17 +81,6 @@ object problem07 extends baseProblem {
     def parser[_: P] = P(bag ~ "contain" ~ contents ~ ".").map(BagInfo tupled _)
 
     parseValue(str, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseBagInfo("light red bags contain 1 bright white bag, 2 muted yellow bags.")) {
-      case BagInfo("light red", Seq(Content(1, "bright white"), Content(2, "muted yellow"))) =>
-    }
-
-    assertMatch(parseBagInfo("faded blue bags contain no other bags.")) { case BagInfo("faded blue", Seq()) =>
-    }
   }
 
 }

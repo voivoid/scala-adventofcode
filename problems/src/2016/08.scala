@@ -35,11 +35,11 @@ object problem08 extends baseProblem {
   private val On = '1'
   private val Off = '0'
 
-  private sealed trait Instruction {
+  private[problems] sealed trait Instruction {
     def run(grid: Grid): Grid
   }
 
-  private case class Rect(width: Int, height: Int) extends Instruction {
+  private[problems] case class Rect(width: Int, height: Int) extends Instruction {
     override def run(grid: Grid): Grid = {
       for {
         x <- 0 until width
@@ -50,7 +50,7 @@ object problem08 extends baseProblem {
     }
   }
 
-  private case class RotateCol(x: Int, by: Int) extends Instruction {
+  private[problems] case class RotateCol(x: Int, by: Int) extends Instruction {
     override def run(grid: Grid): Grid = {
       val height = grid.length
       val colIndices = 0 until height
@@ -70,7 +70,7 @@ object problem08 extends baseProblem {
     }
   }
 
-  private case class RotateRow(y: Int, by: Int) extends Instruction {
+  private[problems] case class RotateRow(y: Int, by: Int) extends Instruction {
     override def run(grid: Grid): Grid = {
       val width = grid(0).length
       val rowIndices = 0 until width
@@ -90,7 +90,7 @@ object problem08 extends baseProblem {
     }
   }
 
-  private def parseInstruction(str: String): Instruction = {
+  private[problems] def parseInstruction(str: String): Instruction = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, num}
@@ -106,14 +106,6 @@ object problem08 extends baseProblem {
     def parser[_: P] = P(rect | rotate)
 
     parseValue(str, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseInstruction("rect 3x2")) { case Rect(3, 2) => }
-    assertMatch(parseInstruction("rotate column x=1 by 1")) { case RotateCol(1, 1) => }
-    assertMatch(parseInstruction("rotate row y=0 by 4")) { case RotateRow(0, 4) => }
   }
 
 }

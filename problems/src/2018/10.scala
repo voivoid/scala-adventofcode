@@ -23,7 +23,7 @@ object problem10 extends baseProblem {
   private def charWidth = 8
   private def charHeight = 10
 
-  private case class Point(x: Int, y: Int, velx: Int, vely: Int)
+  private[problems] case class Point(x: Int, y: Int, velx: Int, vely: Int)
   private type Points = Vector[Point]
 
   private def pointsStatesIterator(initial: Points): Iterator[Points] = {
@@ -70,7 +70,7 @@ object problem10 extends baseProblem {
     (left, top, width, height)
   }
 
-  private def parsePoint(s: String): Point = {
+  private[problems] def parsePoint(s: String): Point = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, num}
@@ -81,12 +81,6 @@ object problem10 extends baseProblem {
     def parser[_: P] = P(pos ~ vel).map { case (x, y, (vx, vy)) => Point(x, y, vx, vy) }
 
     parseValue(s, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parsePoint("position=<9,1> velocity=<0,2>")) { case Point(9, 1, 0, 2) => }
   }
 
 }

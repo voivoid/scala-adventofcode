@@ -35,7 +35,7 @@ object problem09 extends baseProblem {
 
   private type City = String
   private type Distance = Int
-  private case class Route(from: City, to: City, distance: Distance)
+  private[problems] case class Route(from: City, to: City, distance: Distance)
 
   private def makeDistanceMap(routes: Iterator[Route]): Map[(City, City), Distance] = {
     routes.flatMap { case Route(from, to, distance) =>
@@ -43,7 +43,7 @@ object problem09 extends baseProblem {
     }.toMap
   }
 
-  private def parseRoute(str: String): Route = {
+  private[problems] def parseRoute(str: String): Route = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, alpha, num}
@@ -52,13 +52,6 @@ object problem09 extends baseProblem {
     def parser[_: P] = P(city ~ "to" ~ city ~ "=" ~ num).map(Route tupled _)
 
     parseValue(str, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseRoute("London to Dublin = 464")) { case Route("London", "Dublin", 464) =>
-    }
   }
 
 }

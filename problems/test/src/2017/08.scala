@@ -20,7 +20,14 @@ object year2017_08 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+      assertMatch(parseInstruction("b inc 5 if a > 1")) {
+        case Instruction("b", 5, "a", op) if (op(2)) =>
+      }
+
+      assertMatch(parseInstruction("c dec -10 if a >= 1")) {
+        case Instruction("c", 10, "a", op) if (op(1)) =>
+      }
     }
   }
 }

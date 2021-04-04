@@ -56,7 +56,31 @@ object year2020_04 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+
+      val passports = parsePassports("abc:def xxx:yyy\nyyy:zzz\n\nqwe:asd")
+      val passport1 = Map("abc" -> "def", "xxx" -> "yyy", "yyy" -> "zzz")
+      val passport2 = Map("qwe" -> "asd")
+
+      assertMatch(passports) { case Seq(p1, p2) if p1 == passport1 && p2 == passport2 => }
+
+      assert(isBYRvalid("2002"))
+      assert(!isBYRvalid("2003"))
+
+      assert(isHGTvalid("60in"))
+      assert(isHGTvalid("190cm"))
+      assert(!isHGTvalid("190in"))
+      assert(!isHGTvalid("190"))
+
+      assert(isHCLvalid("#123abc"))
+      assert(!isHCLvalid("#123abz"))
+      assert(!isHCLvalid("123abc"))
+
+      assert(isECLvalid("brn"))
+      assert(!isECLvalid("wat"))
+
+      assert(isPIDvalid("000000001"))
+      assert(!isPIDvalid("0123456789"))
     }
   }
 }

@@ -6,14 +6,15 @@ object problems extends ScalaModule with ScalafmtModule {
   override def scalacOptions = scalaOpts
   override def ivyDeps = Agg(
     ivy"com.lihaoyi::fastparse:2.3.2",
-    ivy"com.lihaoyi::utest:0.7.7",
     ivy"org.scala-lang.modules::scala-parallel-collections:1.0.1",
     ivy"org.scala-lang.modules::scala-collection-contrib:0.2.2",
+    ivy"org.scala-lang.modules:scala-reflect:${scalaVersion()}",
     ivy"org.typelevel::cats-core:2.2.0")
 
   object test extends Tests with ScalafmtModule {
     override def scalaVersion = problems.scalaVersion
     override def moduleDeps = Seq(problems)
+    override def ivyDeps = Agg(ivy"com.lihaoyi::utest:0.7.7")
     override def testFrameworks = Seq("utest.runner.Framework")
   }
 

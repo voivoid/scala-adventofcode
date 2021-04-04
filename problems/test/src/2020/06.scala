@@ -31,7 +31,9 @@ object year2020_06 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+
+      assertMatch(parseGroups("abc\ndef\n\naaa")) { case Seq(Seq("abc", "def"), Seq("aaa")) => }
     }
   }
 }

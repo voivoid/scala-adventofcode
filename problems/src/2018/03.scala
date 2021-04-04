@@ -27,7 +27,7 @@ object problem03 extends baseProblem {
 
   private type Rect = geo.Rect[Int]
   private type ClaimId = Int
-  private case class Claim(id: ClaimId, area: Rect)
+  private[problems] case class Claim(id: ClaimId, area: Rect)
 
   private def parseClaims(input: Input): List[Claim] = input.getLines().map(parseClaim).toList
 
@@ -53,7 +53,7 @@ object problem03 extends baseProblem {
       }
     }
 
-  private def parseClaim(line: String): Claim = {
+  private[problems] def parseClaim(line: String): Claim = {
     import fastparse._
     import SingleLineWhitespace._
     import adventOfCode.utils.parse.{num, parseValue}
@@ -70,7 +70,7 @@ object problem03 extends baseProblem {
 
   private def initialArea = Rect(Point(0, 0), Point(1000, 1000))
 
-  private def divideRect(rect: Rect): List[Rect] = {
+  private[problems] def divideRect(rect: Rect): List[Rect] = {
     import scala.math.Integral.Implicits._
     assert(rect.width > 1 || rect.height > 1)
 
@@ -98,30 +98,6 @@ object problem03 extends baseProblem {
     }
 
     lb.result()
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseClaim("#1 @ 1,3: 4x4")) { case Claim(1, Rect(Point(1, 3), Point(4, 6))) => }
-
-    assertMatch(divideRect(Rect(Point(0, 0), Point(3, 3)))) {
-      case List(
-            Rect(Point(0, 0), Point(1, 1)),
-            Rect(Point(0, 2), Point(1, 3)),
-            Rect(Point(2, 0), Point(3, 1)),
-            Rect(Point(2, 2), Point(3, 3))
-          ) =>
-    }
-
-    assertMatch(divideRect(Rect(Point(0, 0), Point(4, 4)))) {
-      case List(
-            Rect(Point(0, 0), Point(2, 2)),
-            Rect(Point(0, 3), Point(2, 4)),
-            Rect(Point(3, 0), Point(4, 2)),
-            Rect(Point(3, 3), Point(4, 4))
-          ) =>
-    }
   }
 
 }

@@ -16,7 +16,23 @@ object year2016_11 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+
+      assertMatch(parseFloor("The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.")) {
+        case (1, Seq(Chip("hydrogen"), Chip("lithium"))) =>
+      }
+
+      assertMatch(parseFloor("The second floor contains a hydrogen generator.")) { case (2, Seq(Gen("hydrogen"))) =>
+      }
+
+      assertMatch(parseFloor("The fourth floor contains nothing relevant.")) { case (4, Seq()) =>
+      }
+
+      assertMatch(
+        parseFloor(
+          "The third floor contains a thulium generator, a thulium-compatible microchip, a plutonium generator, and a strontium generator."
+        )
+      ) { case (3, Seq(Gen("thulium"), Chip("thulium"), Gen("plutonium"), Gen("strontium"))) => }
     }
   }
 

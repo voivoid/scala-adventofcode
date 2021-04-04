@@ -32,7 +32,7 @@ object problem06 extends baseProblem {
     groupAnswers.reduceLeft(_.intersect(_)).size
   }
 
-  private def parseGroups(input: String): Seq[Group] = {
+  private[problems] def parseGroups(input: String): Seq[Group] = {
     import fastparse._
     import NoWhitespace._
     import adventOfCode.utils.parse.{parseValue}
@@ -41,12 +41,6 @@ object problem06 extends baseProblem {
     def groups[_: P] = group.rep(sep = "\n\n")
 
     parseValue(input, groups(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseGroups("abc\ndef\n\naaa")) { case Seq(Seq("abc", "def"), Seq("aaa")) => }
   }
 
 }

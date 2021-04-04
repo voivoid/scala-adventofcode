@@ -34,7 +34,14 @@ object year2020_07 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+
+      assertMatch(parseBagInfo("light red bags contain 1 bright white bag, 2 muted yellow bags.")) {
+        case BagInfo("light red", Seq(Content(1, "bright white"), Content(2, "muted yellow"))) =>
+      }
+
+      assertMatch(parseBagInfo("faded blue bags contain no other bags.")) { case BagInfo("faded blue", Seq()) =>
+      }
     }
   }
 }

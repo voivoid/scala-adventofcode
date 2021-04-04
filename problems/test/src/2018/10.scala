@@ -7,7 +7,9 @@ object year2018_10 extends BaseTests {
 
   val tests = Tests {
     test("impl tests") {
-      problem.implTests()
+      import problem._
+
+      assertMatch(parsePoint("position=<9,1> velocity=<0,2>")) { case Point(9, 1, 0, 2) => }
     }
   }
 }

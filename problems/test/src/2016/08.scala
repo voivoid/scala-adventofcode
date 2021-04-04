@@ -17,7 +17,10 @@ object year2016_08 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+      assertMatch(parseInstruction("rect 3x2")) { case Rect(3, 2) => }
+      assertMatch(parseInstruction("rotate column x=1 by 1")) { case RotateCol(1, 1) => }
+      assertMatch(parseInstruction("rotate row y=0 by 4")) { case RotateRow(0, 4) => }
     }
   }
 }

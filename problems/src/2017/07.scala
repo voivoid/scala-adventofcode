@@ -20,7 +20,7 @@ object problem07 extends baseProblem {
   private type Name = String
   private type Weight = Int
   private type MismatchedWeight = Weight
-  private case class Tower(name: Name, weight: Weight, subtowers: Seq[Name], subtowersWeight: Weight)
+  private[problems] case class Tower(name: Name, weight: Weight, subtowers: Seq[Name], subtowersWeight: Weight)
   private type TopToBottomNamesMap = Map[Name, Name]
   private type BottomToTopTowersMap = Map[Name, Tower]
 
@@ -104,7 +104,7 @@ object problem07 extends baseProblem {
     }
   }
 
-  private def parseTower(str: String): Tower = {
+  private[problems] def parseTower(str: String): Tower = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, num, alpha}
@@ -116,13 +116,6 @@ object problem07 extends baseProblem {
     def parser[_: P] = P(name ~ weight ~ subtowers).map { case (name, weight, subtowers) => Tower(name, weight, subtowers, weight) }
 
     parseValue(str, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseTower("pbga (66)")) { case Tower("pbga", 66, Seq(), 66) => }
-    assertMatch(parseTower("fwft (72) -> ktlj, cntj, xhth")) { case Tower("fwft", 72, Seq("ktlj", "cntj", "xhth"), 72) => }
   }
 
 }

@@ -69,7 +69,7 @@ object problem04 extends baseProblem {
     (c.toInt + 1).toChar
   }
 
-  private def nextIncreasingPassword(password: Password): Password = {
+  private[problems] def nextIncreasingPassword(password: Password): Password = {
     def impl(password: List[(Char, Int)]): Password = password match {
       case (a, index) :: (b, _) :: _ if b == '9' => List.fill(PasswordDigits - index)(nextChar(a))
       case (a, index) :: (b, _) :: _ if a > b    => a :: List.fill(PasswordDigits - index - 1)(a)
@@ -79,16 +79,5 @@ object problem04 extends baseProblem {
     }
 
     impl(password.zipWithIndex)
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    nextIncreasingPassword("111111".toList) ==> "111112".toList
-    nextIncreasingPassword("111119".toList) ==> "111122".toList
-    nextIncreasingPassword("111199".toList) ==> "111222".toList
-    nextIncreasingPassword("118999".toList) ==> "119999".toList
-    nextIncreasingPassword("155333".toList) ==> "155555".toList
-    nextIncreasingPassword("900000".toList) ==> "999999".toList
   }
 }

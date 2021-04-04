@@ -25,7 +25,11 @@ object year2020_08 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+
+      assertMatch(parseInstruction("nop +0")) { case Nop(0) => }
+      assertMatch(parseInstruction("acc -99")) { case Acc(-99) => }
+      assertMatch(parseInstruction("jmp +4")) { case Jmp(4) => }
     }
   }
 }

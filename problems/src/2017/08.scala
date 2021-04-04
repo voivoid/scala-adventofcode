@@ -28,7 +28,7 @@ object problem08 extends baseProblem {
   private type CmpOp = RegValue => Boolean
 
   private case class RunResult(maxRegValue: RegValue, regMap: RegMap)
-  private case class Instruction(reg: Reg, value: RegValue, condReg: Reg, condOp: CmpOp)
+  private[problems] case class Instruction(reg: Reg, value: RegValue, condReg: Reg, condOp: CmpOp)
 
   private def runInstruction(maxRegVal: RegValue, regMap: RegMap, instruction: Instruction): RunResult = {
     val condValue = regMap(instruction.condReg)
@@ -38,7 +38,7 @@ object problem08 extends baseProblem {
     } else RunResult(maxRegVal, regMap)
   }
 
-  private def parseInstruction(str: String): Instruction = {
+  private[problems] def parseInstruction(str: String): Instruction = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, num, alpha}
@@ -63,18 +63,6 @@ object problem08 extends baseProblem {
     def parser[_: P] = P(reg ~ value ~ "if" ~ reg ~ cmpOp).map(Instruction tupled _)
 
     parseValue(str, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseInstruction("b inc 5 if a > 1")) {
-      case Instruction("b", 5, "a", op) if (op(2)) =>
-    }
-
-    assertMatch(parseInstruction("c dec -10 if a >= 1")) {
-      case Instruction("c", 10, "a", op) if (op(1)) =>
-    }
   }
 
 }

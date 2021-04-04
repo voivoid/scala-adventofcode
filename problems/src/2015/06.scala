@@ -27,12 +27,12 @@ object problem06 extends baseProblem {
   private def GridSide = 1000
   private def makeInitGrid: Grid = Array.ofDim[Light](GridSide, GridSide)
 
-  private sealed trait Switch
-  private case object On extends Switch
-  private case object Off extends Switch
-  private case object Toggle extends Switch
+  private[problems] sealed trait Switch
+  private[problems] case object On extends Switch
+  private[problems] case object Off extends Switch
+  private[problems] case object Toggle extends Switch
 
-  private case class Instruction(switch: Switch, rect: Rect[Int])
+  private[problems] case class Instruction(switch: Switch, rect: Rect[Int])
 
   private def lightFunction1(switch: Switch) = {
     switch match {
@@ -63,7 +63,7 @@ object problem06 extends baseProblem {
     grid
   }
 
-  private def parseInstruction(str: String): Instruction = {
+  private[problems] def parseInstruction(str: String): Instruction = {
     import fastparse._
     import SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, num}
@@ -75,12 +75,6 @@ object problem06 extends baseProblem {
     def parser[_: P] = P(switch ~ rect).map(Instruction tupled _)
 
     parseValue(str, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseInstruction("turn on 0,0 through 999,999")) { case Instruction(On, Rect(Point(0, 0), Point(999, 999))) => }
   }
 
 }

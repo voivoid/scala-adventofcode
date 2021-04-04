@@ -29,9 +29,9 @@ object problem02 extends baseProblem {
     (password(i1 - 1) == letter ^ password(i2 - 1) == letter)
   }
 
-  private case class Entry(least: Int, most: Int, letter: Char, password: String)
+  private[problems] case class Entry(least: Int, most: Int, letter: Char, password: String)
 
-  private def parseEntry(entryStr: String): Entry = {
+  private[problems] def parseEntry(entryStr: String): Entry = {
     import fastparse._
     import SingleLineWhitespace._
     import adventOfCode.utils.parse.{num, alpha, parseValue}
@@ -43,12 +43,6 @@ object problem02 extends baseProblem {
     def parser[_: P] = (occurances ~ alpha ~ ":" ~ password).map(Entry tupled _)
 
     parseValue(entryStr, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseEntry("1-3 a: abcd")) { case Entry(1, 3, 'a', "abcd") => }
   }
 
 }

@@ -87,15 +87,15 @@ object problem10 extends baseProblem {
   private type BotValues = Map[Index, Set[Value]]
   private type OutputValues = Map[Index, Value]
 
-  private sealed trait Destination
-  private case class BotDestination(bot: Index) extends Destination
-  private case class OutputDestination(bin: Index) extends Destination
+  private[problems] sealed trait Destination
+  private[problems] case class BotDestination(bot: Index) extends Destination
+  private[problems] case class OutputDestination(bin: Index) extends Destination
 
-  private sealed trait Instruction
-  private case class InputInstruction(value: Value, to: Destination) extends Instruction
-  private case class BotInstruction(bot: Index, lowTo: Destination, highTo: Destination) extends Instruction
+  private[problems] sealed trait Instruction
+  private[problems] case class InputInstruction(value: Value, to: Destination) extends Instruction
+  private[problems] case class BotInstruction(bot: Index, lowTo: Destination, highTo: Destination) extends Instruction
 
-  private def parseInstruction(s: String): Instruction = {
+  private[problems] def parseInstruction(s: String): Instruction = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, num}
@@ -108,21 +108,6 @@ object problem10 extends baseProblem {
     def parser[_: P]: P[Instruction] = P(input | bot)
 
     parseValue(s, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseInstruction("value 5 goes to bot 2")) { case InputInstruction(5, BotDestination(2)) =>
-    }
-
-    assertMatch(parseInstruction("bot 2 gives low to bot 1 and high to bot 0")) {
-      case BotInstruction(2, BotDestination(1), BotDestination(0)) =>
-    }
-
-    assertMatch(parseInstruction("bot 0 gives low to output 2 and high to output 0")) {
-      case BotInstruction(0, OutputDestination(2), OutputDestination(0)) =>
-    }
   }
 
 }

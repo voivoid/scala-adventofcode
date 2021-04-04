@@ -19,7 +19,8 @@ object year2015_09 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+      assertMatch(parseRoute("London to Dublin = 464")) { case Route("London", "Dublin", 464) => }
     }
   }
 }

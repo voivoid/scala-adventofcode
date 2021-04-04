@@ -17,7 +17,9 @@ object year2015_06 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+      import adventOfCode.utils.geo.{Point, Rect}
+      assertMatch(parseInstruction("turn on 0,0 through 999,999")) { case Instruction(On, Rect(Point(0, 0), Point(999, 999))) => }
     }
   }
 }

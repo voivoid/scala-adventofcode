@@ -14,7 +14,8 @@ object year2016_04 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+      assertMatch(parseRoom("aaaaa-bbb-z-y-x-123[abxyz]")) { case Room("aaaaa-bbb-z-y-x", 123, "abxyz") => }
     }
   }
 }

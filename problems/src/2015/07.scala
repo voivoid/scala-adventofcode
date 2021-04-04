@@ -24,17 +24,17 @@ object problem07 extends baseProblem {
   private type WireName = String
   private type WireMap = Map[WireName, Source]
 
-  private sealed trait Source
-  private case class Value(signal: Signal) extends Source
-  private case class Wire(wire: WireName) extends Source
+  private[problems] sealed trait Source
+  private[problems] case class Value(signal: Signal) extends Source
+  private[problems] case class Wire(wire: WireName) extends Source
 
   private type UnaryFunc = Signal => Signal
-  private case class UnaryOp(arg1: Source, f: UnaryFunc) extends Source
+  private[problems] case class UnaryOp(arg1: Source, f: UnaryFunc) extends Source
 
   private type BinaryFunc = (Signal, Signal) => Signal
-  private case class BinaryOp(arg1: Source, arg2: Source, f: BinaryFunc) extends Source
+  private[problems] case class BinaryOp(arg1: Source, arg2: Source, f: BinaryFunc) extends Source
 
-  private def calcWire(wire: WireName, wireMap: WireMap): (Signal, WireMap) = {
+  private[problems] def calcWire(wire: WireName, wireMap: WireMap): (Signal, WireMap) = {
     val source = wireMap(wire)
     val (resultSignal, resultMap) = calcSource(source, wireMap)
 
@@ -61,7 +61,7 @@ object problem07 extends baseProblem {
     (resultSignal & 0xffff, resultMap)
   }
 
-  private def parseWireMap(input: Input): WireMap = {
+  private[problems] def parseWireMap(input: Input): WireMap = {
     input
       .getLines()
       .map(str => {
@@ -71,7 +71,7 @@ object problem07 extends baseProblem {
       .toMap
   }
 
-  private def parseInstruction(str: String): (Source, WireName) = {
+  private[problems] def parseInstruction(str: String): (Source, WireName) = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{num, alpha, parseValue}
@@ -99,35 +99,6 @@ object problem07 extends baseProblem {
     def parser[_: P] = P(instruction ~ "->" ~ wireName)
 
     parseValue(str, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseInstruction("123 -> x")) { case (Value(123), "x") => }
-    assertMatch(parseInstruction("y -> x")) { case (Wire("y"), "x") => }
-    assertMatch(parseInstruction("x AND y -> d")) { case (BinaryOp(Wire("x"), Wire("y"), _), "d") => }
-    assertMatch(parseInstruction("NOT x -> h")) { case (UnaryOp(Wire("x"), _), "h") => }
-
-    def input = """123 -> x
-                  |456 -> y
-                  |x AND y -> d
-                  |x OR y -> e
-                  |x LSHIFT 2 -> f
-                  |y RSHIFT 2 -> g
-                  |NOT x -> h
-                  |NOT y -> i""".stripMargin
-
-    val wireMap = parseWireMap(scala.io.Source.fromString(input))
-    calcWire("x", wireMap)._1 ==> 123
-    calcWire("y", wireMap)._1 ==> 456
-    calcWire("d", wireMap)._1 ==> 72
-    calcWire("e", wireMap)._1 ==> 507
-    calcWire("f", wireMap)._1 ==> 492
-    calcWire("g", wireMap)._1 ==> 114
-    calcWire("h", wireMap)._1 ==> 65412
-    calcWire("i", wireMap)._1 ==> 65079
-
   }
 
 }

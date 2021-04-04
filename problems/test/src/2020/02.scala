@@ -17,7 +17,9 @@ object year2020_02 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+
+      assertMatch(parseEntry("1-3 a: abcd")) { case Entry(1, 3, 'a', "abcd") => }
     }
   }
 }

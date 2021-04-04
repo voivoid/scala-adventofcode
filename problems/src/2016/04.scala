@@ -14,7 +14,7 @@ object problem04 extends baseProblem {
     storageRoom.id
   }
 
-  private case class Room(name: String, id: Int, checksum: String)
+  private[problems] case class Room(name: String, id: Int, checksum: String)
 
   private def getRealRooms(input: Input): Iterator[Room] = {
     input.getLines().map(parseRoom).filter(isRealRoom)
@@ -50,7 +50,7 @@ object problem04 extends baseProblem {
     }
   }
 
-  private def parseRoom(input: String): Room = {
+  private[problems] def parseRoom(input: String): Room = {
     import fastparse._
     import NoWhitespace._
     import adventOfCode.utils.parse.{parseValue, num}
@@ -62,12 +62,6 @@ object problem04 extends baseProblem {
     def parser[_: P] = P(name ~ id ~ checksum).map(Room tupled _)
 
     parseValue(input, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    assertMatch(parseRoom("aaaaa-bbb-z-y-x-123[abxyz]")) { case Room("aaaaa-bbb-z-y-x", 123, "abxyz") => }
   }
 
 }

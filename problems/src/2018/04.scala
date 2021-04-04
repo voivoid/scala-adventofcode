@@ -22,7 +22,7 @@ object problem04 extends baseProblem {
   private type SleepInterval = (Int, Int)
   private type GuardId = Int
   private type ShiftsMap = Map[GuardId, Seq[Shift]]
-  private case class Shift(guardId: GuardId, sleepIntervals: Seq[SleepInterval])
+  private[problems] case class Shift(guardId: GuardId, sleepIntervals: Seq[SleepInterval])
 
   private def makeGuardIdToShiftsMap(input: Input): ShiftsMap = {
     val sortedInput = input.getLines().toVector.sorted.mkString
@@ -53,7 +53,7 @@ object problem04 extends baseProblem {
     minutesAsleep.sum
   }
 
-  private def parseShifts(input: String): Seq[Shift] = {
+  private[problems] def parseShifts(input: String): Seq[Shift] = {
     import fastparse._
     import MultiLineWhitespace._
     import adventOfCode.utils.parse.{num, digit, parseValue}
@@ -71,18 +71,6 @@ object problem04 extends baseProblem {
     def parser[_: P] = guard.rep(1)
 
     parseValue(input, parser(_))
-  }
-
-  private[problems] def implTests(): Unit = {
-    import utest._
-
-    val guard10 = """[1518-11-01 00:00] Guard #10 begins shift
-                    |[1518-11-01 00:05] falls asleep
-                    |[1518-11-01 00:25] wakes up
-                    |[1518-11-01 00:30] falls asleep
-                    |[1518-11-01 00:55] wakes up""".stripMargin
-
-    assertMatch(parseShifts(guard10)) { case Seq(Shift(10, Seq((5, 25), (30, 55)))) => }
   }
 
 }

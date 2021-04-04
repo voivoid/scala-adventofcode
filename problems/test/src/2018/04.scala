@@ -33,7 +33,15 @@ object year2018_04 extends BaseTests {
     }
 
     test("impl tests") {
-      problem.implTests()
+      import problem._
+
+      val guard10 = """[1518-11-01 00:00] Guard #10 begins shift
+                      |[1518-11-01 00:05] falls asleep
+                      |[1518-11-01 00:25] wakes up
+                      |[1518-11-01 00:30] falls asleep
+                      |[1518-11-01 00:55] wakes up""".stripMargin
+
+      assertMatch(parseShifts(guard10)) { case Seq(Shift(10, Seq((5, 25), (30, 55)))) => }
     }
   }
 }
