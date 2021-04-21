@@ -4,7 +4,6 @@ package year2020
 object problem11 extends baseProblem {
 
   import adventOfCode.utils.geo.Point
-  type Coord = Point[Int]
 
   override def solve1(input: Input): Int = {
     solve(input, isAdjacentOccupied, 4)
@@ -13,6 +12,8 @@ object problem11 extends baseProblem {
   override def solve2(input: Input): Int = {
     solve(input, isVisibleOccupied, 5)
   }
+
+  private type Coord = Point[Int]
 
   private def solve(input: Input, isOccupied: IsOccupiedF, occupiedSeats: Int): Int = {
     val lines = input.getLines().zipWithIndex
@@ -37,7 +38,7 @@ object problem11 extends baseProblem {
 
   private type SeatsMap = Map[Coord, Char]
 
-  def calcNextState(seatsMap: SeatsMap, isOccupied: IsOccupiedF, occupiedSeats: Int): SeatsMap = {
+  private def calcNextState(seatsMap: SeatsMap, isOccupied: IsOccupiedF, occupiedSeats: Int): SeatsMap = {
     seatsMap.map { case (coord, seatState) =>
       val nextState = {
         import adventOfCode.utils.path.neighbours8

@@ -146,15 +146,19 @@ package object path {
     (to.x - from.x).abs + (to.y - from.y).abs
   }
 
-  def doTurn(currentDir: Bearing, turn: Turn): Bearing = {
+  def doTurn(currentDir: Bearing, turn: Turn, turns: Int): Bearing = {
     if (turn == Turn.None) currentDir
     else {
       val shift =
-        if (turn == Turn.Left) -1 else +1
+        if (turn == Turn.Left) -turns else +turns
       val dirs = Bearing.values.size
 
       Bearing((currentDir.id + shift + dirs) % dirs)
     }
+  }
+
+  def doTurn(currentDir: Bearing, turn: Turn): Bearing = {
+    doTurn(currentDir, turn, 1)
   }
 
   def bearingLocDelta(bearing: Bearing, distance: Int) = bearing match {
