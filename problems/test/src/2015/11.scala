@@ -26,6 +26,9 @@ object year2015_11 extends BaseTests {
       problem.solve1("aabcb") ==> "aabcc"
       problem.solve1("aabcc") ==> "bbcdd"
       problem.solve1("xyaaa") ==> "aaabcc"
+      problem.solve1("xxxxx") ==> "xxyzz"
+      problem.solve1("yyyyy") ==> "aaabcc"
+      problem.solve1("zzzzz") ==> "aaabcc"
 
       problem.solve1("ggggg") ==> "ppqrr"
       problem.solve1("xxzzzz") ==> "xyzzaa"

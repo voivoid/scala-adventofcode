@@ -1,4 +1,5 @@
 package adventOfCode.utils
+
 package path {
 
   object Turn extends scala.Enumeration {
@@ -118,6 +119,28 @@ package object path {
 
   type Location = geo.Point[Int]
   val Location = geo.Point[Int] _
+
+  def neighbours8(l: Location): List[Location] = {
+    List(
+      l + UpLoc,
+      l + DownLoc,
+      l + RightLoc,
+      l + LeftLoc,
+      l + UpLoc + LeftLoc,
+      l + UpLoc + RightLoc,
+      l + DownLoc + LeftLoc,
+      l + DownLoc + RightLoc
+    )
+  }
+
+  def neighbours4(l: Location): List[Location] = {
+    List(l + UpLoc, l + DownLoc, l + RightLoc, l + LeftLoc)
+  }
+
+  private def UpLoc = geo.Point(0, 1)
+  private def DownLoc = geo.Point(0, -1)
+  private def RightLoc = geo.Point(1, 0)
+  private def LeftLoc = geo.Point(-1, 0)
 
   def manhattanDistance(from: Location, to: Location) = {
     (to.x - from.x).abs + (to.y - from.y).abs

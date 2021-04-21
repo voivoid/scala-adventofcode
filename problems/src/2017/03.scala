@@ -3,6 +3,8 @@ package year2017
 
 object problem03 extends baseProblem {
 
+  import adventOfCode.utils.geo.Point
+
   override def solve1(input: Input): Int = {
     stepsToCenter(getInputN(input))
   }
@@ -28,11 +30,11 @@ object problem03 extends baseProblem {
     }
   }
 
-  private type Location = (Int, Int)
+  private type Location = Point[Int]
   private type ValuesMap = Map[Location, Int]
 
   private def getSpiralValues(): Iterator[Int] = {
-    val startLocation = (0, 0)
+    val startLocation = Point(0, 0)
     val spiralPath = makeSpiralPath(startLocation)
 
     spiralPath
@@ -46,13 +48,13 @@ object problem03 extends baseProblem {
   }
 
   private def getNeighbourValues(location: Location, valuesMap: ValuesMap): Int = {
-    getNeighbours(location).map(valuesMap.getOrElse(_, 0)).sum
+    adventOfCode.utils.path.neighbours8(location).map(valuesMap.getOrElse(_, 0)).sum
   }
 
-  private def up = (0, 1)
-  private def right = (1, 0)
-  private def down = (0, -1)
-  private def left = (-1, 0)
+  private def up = Point(0, 1)
+  private def right = Point(1, 0)
+  private def down = Point(0, -1)
+  private def left = Point(-1, 0)
 
   private def makeSpiralPath(startLocation: Location): Iterator[Location] = {
     import adventOfCode.utils.algorithms.IterableCycle
@@ -65,17 +67,10 @@ object problem03 extends baseProblem {
     }
 
     spiralMoves
-      .scanLeft(startLocation) { case ((currentX, currentY), (dx, dy)) =>
-        (currentX + dx, currentY + dy)
+      .scanLeft(startLocation) { case (Point(currentX, currentY), Point(dx, dy)) =>
+        Point(currentX + dx, currentY + dy)
       }
       .drop(1)
-  }
-
-  private def getNeighbours(location: Location): List[Location] = {
-    import cats.implicits.catsSyntaxSemigroup
-
-    List(left |+| up, up, right |+| up, left, right, left |+| down, down, right |+| down)
-      .map { _ |+| location }
   }
 
   private def getInputN(input: Input): Int = input.mkString.trim.toInt

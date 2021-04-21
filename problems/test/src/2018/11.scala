@@ -12,8 +12,8 @@ object year2018_11 extends BaseTests {
     }
 
     test("solve2 base cases") {
-      problem.solve2("18") ==> "90,269,16"
-      problem.solve2("42") ==> "232,251,12"
+      problem.solve2("18", 20) ==> "90,269,16"
+      problem.solve2("42", 20) ==> "232,251,12"
     }
 
     test("test impl") {

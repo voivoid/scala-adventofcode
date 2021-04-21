@@ -17,7 +17,7 @@ object problem10 extends baseProblem {
 
   override def solve2(input: Input): Int = {
     val points = input.getLines().map(parsePoint).toVector
-    pointsStatesIterator(points).takeWhile(!checkMessageIsVisible(_)).size
+    pointsStatesIterator(points).indexWhere(checkMessageIsVisible(_))
   }
 
   private def charWidth = 8

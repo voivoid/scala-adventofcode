@@ -49,7 +49,7 @@ object problem04 extends baseProblem {
 
     val (validFrom, validTo) = getPasswordRange(input)
     val validPasswords = Iterator.iterate(validFrom)(nextValidPassword)
-    validPasswords.takeWhile(password => password != validTo).size
+    validPasswords.indexWhere(_ == validTo)
   }
 
   private def parseRange(input: String): (Password, Password) = {

@@ -69,11 +69,11 @@ object problem11 extends baseProblem {
   // are some consecutive letters like 'ccdee' or 'xxyzz'
   // ( since AA and CC are two non-overlapping pairs and ABC are increasing three letters ).
   //
-  // if a password is less then 5 chars it can be replaced with AABCC
+  // if a password length is <= 5 chars it can be replaced with AABCC
   // if none of requirements are fulfilled OR a password already ends with AABCC postfix
   // then a next password can be calculated by replacing last 5 chars with an AABCC postfix
   private def isSimpleCase(reversedPassword: Password): Boolean = {
-    (!hasIncreasingThreeLetters(reversedPassword) && !hasNonOverlappingLettersPair(reversedPassword)) || {
+    reversedPassword.size <= 5 || (!hasIncreasingThreeLetters(reversedPassword) && !hasNonOverlappingLettersPair(reversedPassword)) || {
       val last5 = reversedPassword.take(5)
       last5.size < 5 || last5 == reversedPostfixStartingFrom(last5.last)
     }
@@ -85,7 +85,7 @@ object problem11 extends baseProblem {
       val postfixBaseChar = postfix.last
 
       val newPostfixBaseChar =
-        if (less(postfix, simpleReversedPostfix(postfixBaseChar)._1))
+        if (less(postfix, simpleReversedPostfix(postfixBaseChar)._1) || postfixBaseChar == 'z')
           postfixBaseChar
         else
           nextChar(postfixBaseChar)
@@ -97,10 +97,10 @@ object problem11 extends baseProblem {
     }
   }
 
-  private def simpleReversedPostfix(a: Char): (Password, Boolean) = a match {
-    case last if last == 'y' || last == 'z'                => (reversedPostfixStartingFrom('a'), true)
-    case forbidden if forbidden >= 'g' && forbidden <= 'o' => (reversedPostfixStartingFrom('p'), false)
-    case c                                                 => (reversedPostfixStartingFrom(c), false)
+  private def simpleReversedPostfix(c: Char): (Password, Boolean) = {
+    if (c == 'y' || c == 'z') (reversedPostfixStartingFrom('a'), true)
+    else if (c >= 'g' && c <= 'o') (reversedPostfixStartingFrom('p'), false)
+    else (reversedPostfixStartingFrom(c), false)
   }
 
   private def reversedPostfixStartingFrom(a: Char): Password = {

@@ -61,7 +61,7 @@ object problem06 extends baseProblem {
   }
 
   private def findCommonPathLen(path1: Path, path2: Path): Int = {
-    path1.reverseIterator.zip(path2.reverseIterator).takeWhile { case (p1, p2) => p1 == p2 }.size
+    path1.reverseIterator.zip(path2.reverseIterator).indexWhere { case (p1, p2) => p1 != p2 }
   }
 
 }

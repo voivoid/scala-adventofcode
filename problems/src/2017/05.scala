@@ -24,7 +24,7 @@ object problem05 extends baseProblem {
       }
     }
 
-    offsetsHistory.takeWhile { case (_, offset) => offset >= 0 && offset < maxOffset }.size
+    offsetsHistory.indexWhere { case (_, offset) => offset < 0 || offset >= maxOffset }
   }
 
   private def calcNextOffset1(offset: Int): Int = offset + 1

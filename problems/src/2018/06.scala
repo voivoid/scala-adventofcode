@@ -148,8 +148,7 @@ object problem06 extends baseProblem {
       x >= 0 && y >= 0 && x < width && y < height && grid(y)(x) == Empty
     }
 
-    List(p + Point(0, 1), p + Point(0, -1), p + Point(1, 0), p + Point(-1, 0))
-      .filter(isValidPoint)
+    adventOfCode.utils.path.neighbours4(p).filter(isValidPoint)
   }
 
   private def getBorderCoords(grid: Grid): IndexedSeq[Coord] = {

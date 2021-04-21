@@ -13,10 +13,14 @@ object problem11 extends baseProblem {
   }
 
   override def solve2(input: Input): String = {
+    solve2(input, 300)
+  }
+
+  def solve2(input: Input, maxSide: Int): String = {
     val sn = input.mkString.toInt
     val grid = makeCellSummedTable(sn)
 
-    val maxPower = (1 to 300).iterator.map(findMaxPowerCoord(grid, _)).maxBy(_.power)
+    val maxPower = (1 to maxSide).iterator.map(findMaxPowerCoord(grid, _)).maxBy(_.power)
 
     s"${maxPower.x},${maxPower.y},${maxPower.side}"
   }
