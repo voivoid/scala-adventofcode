@@ -19,9 +19,11 @@ package algorithms {
 
 package object algorithms {
 
-  def gcd(a: Int, b: Int): Int = {
-    if (b == 0) a else gcd(b, a % b)
-  }
+  def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+  def gcd(a: Long, b: Long): Long = if (b == 0) a else gcd(b, a % b)
+
+  def lcm(a: Int, b: Int): Int = a * (b / gcd(a, b))
+  def lcm(a: Long, b: Long): Long = a * (b / gcd(a, b))
 
   def powInt(n: Int, pow: Int): Int = {
     require(pow >= 0)

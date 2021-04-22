@@ -20,6 +20,22 @@ case class Point[A](x: A, y: A)(implicit num: Numeric[A]) extends Ordered[Point[
   }
 }
 
+case class Point3D[A](x: A, y: A, z: A)(implicit num: Numeric[A]) extends Ordered[Point3D[A]] {
+  import num._
+
+  def move(dx: A, dy: A, dz: A): Point3D[A] = {
+    Point3D(plus(x, dx), plus(y, dy), plus(z, dz))
+  }
+
+  def +(p: Point3D[A]): Point3D[A] = move(p.x, p.y, p.z)
+  def -(p: Point3D[A]): Point3D[A] = move(-p.x, -p.y, -p.z)
+
+  override def compare(that: Point3D[A]): Int = {
+    import scala.math.Ordered.orderingToOrdered
+    (x, y, z).compare((that.x, that.y, that.z))
+  }
+}
+
 case class Rect[A](leftTop: Point[A], rightBottom: Point[A])(implicit num: Numeric[A]) {
   import num._
 
