@@ -1,11 +1,9 @@
 package adventOfCode.problems
 package year2015
 
-import play.api.libs.json.JsValue
-
 object problem12 extends baseProblem {
 
-  import play.api.libs.json.{Json, JsNumber, JsArray, JsObject, JsString}
+  import play.api.libs.json.{Json, JsValue, JsNumber, JsArray, JsObject, JsString}
 
   override def solve1(input: Input): Int = {
     sumNums(Json.parse(input.mkString))

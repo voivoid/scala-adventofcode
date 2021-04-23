@@ -22,7 +22,6 @@ object year2015_12 extends BaseTests {
       problem.solve2("[1,{\"c\":\"red\",\"b\":2},3]") ==> 4
       problem.solve2("{\"d\":\"red\",\"e\":[1,2,3,4],\"f\":5}") ==> 0
       problem.solve2("[1,\"red\",5]") ==> 6
-
     }
   }
 }
