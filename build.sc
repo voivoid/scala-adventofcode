@@ -9,7 +9,8 @@ object problems extends ScalaModule with ScalafmtModule {
     ivy"org.scala-lang.modules::scala-parallel-collections:1.0.1",
     ivy"org.scala-lang.modules::scala-collection-contrib:0.2.2",
     ivy"org.scala-lang.modules:scala-reflect:${scalaVersion()}",
-    ivy"org.typelevel::cats-core:2.2.0")
+    ivy"org.typelevel::cats-core:2.2.0",
+    ivy"com.typesafe.play::play-json:2.9.2")
 
   object test extends Tests with ScalafmtModule {
     override def scalaVersion = problems.scalaVersion
