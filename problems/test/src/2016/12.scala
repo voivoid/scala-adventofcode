@@ -18,8 +18,6 @@ object year2016_12 extends BaseTests {
       problem.solve1(input) ==> 42
     }
 
-    test("solve2 base cases") {}
-
     test("impl tests") {
       import problem._
 
