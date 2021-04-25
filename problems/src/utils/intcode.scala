@@ -27,6 +27,10 @@ package object intcode {
     runMachine(machine.copy(input = machine.input ++ input))
   }
 
+  def resetOutput(machine: Machine): Machine = {
+    machine.copy(output = List.empty)
+  }
+
   def runMachine(machine: Machine): Machine = {
     import adventOfCode.utils.algorithms.IteratorSlidingTuple
 
