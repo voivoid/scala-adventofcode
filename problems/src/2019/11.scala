@@ -76,8 +76,7 @@ object problem11 extends baseProblem {
     val nextBearing = doTurn(bearing, makeTurn(turnCode))
     val nextPaintedMap = paintedMap.updated(coord, colorToPaint.toInt)
 
-    val (dx, dy) = bearingLocDelta(nextBearing, 1)
-    val nextCoord = coord + Point(dx, dy)
+    val nextCoord = coord + bearingLocDelta(nextBearing, 1)
 
     State(nextMachine, nextBearing, nextCoord, nextPaintedMap)
   }

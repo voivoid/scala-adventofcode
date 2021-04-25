@@ -1,5 +1,7 @@
 package adventOfCode.utils
 
+import adventOfCode.utils.geo.Point
+
 package path {
 
   object Turn extends scala.Enumeration {
@@ -49,10 +51,9 @@ package path {
     private def runInstruction(state: State, instruction: Instruction): State = {
       val newDir =
         doTurn(state.dir, instruction.turn)
-      val (dx, dy) =
-        bearingLocDelta(newDir, instruction.distance)
+      val delta = bearingLocDelta(newDir, instruction.distance)
 
-      State(newDir, Location(state.location.x + dx, state.location.y + dy))
+      State(newDir, state.location + delta)
     }
 
     private def parseInstructions(input: String): Iterator[Instruction] = {
@@ -88,8 +89,8 @@ package path {
     }
 
     private def runInstruction(state: State, instruction: Instruction): State = {
-      val (dx, dy) = dirLocDelta(instruction.dir, instruction.distance)
-      State(Location(state.location.x + dx, state.location.y + dy))
+      val delta = dirLocDelta(instruction.dir, instruction.distance)
+      State(state.location + delta)
     }
 
     private def parseInstructions(input: String): Iterator[Instruction] = {
@@ -161,14 +162,14 @@ package object path {
     doTurn(currentDir, turn, 1)
   }
 
-  def bearingLocDelta(bearing: Bearing, distance: Int) = bearing match {
-    case Bearing.North => (0, distance)
-    case Bearing.East  => (distance, 0)
-    case Bearing.South => (0, -distance)
-    case Bearing.West  => (-distance, 0)
+  def bearingLocDelta(bearing: Bearing, distance: Int): Point[Int] = bearing match {
+    case Bearing.North => Point(0, distance)
+    case Bearing.East  => Point(distance, 0)
+    case Bearing.South => Point(0, -distance)
+    case Bearing.West  => Point(-distance, 0)
   }
 
-  def dirLocDelta(dir: Dir, distance: Int) = {
+  def dirLocDelta(dir: Dir, distance: Int): Point[Int] = {
     val bearingFromDir = dir match {
       case Dir.Up    => Bearing.North
       case Dir.Right => Bearing.East
