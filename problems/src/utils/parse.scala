@@ -4,7 +4,9 @@ package object parse {
   import fastparse._
 
   def digit[_: P] = P(CharIn("0-9"))
-  def num[_: P] = P((("+" | "-").? ~~ digit.repX(1)).!.map(_.toInt))
+  def numStr[_: P] = P((("+" | "-").? ~~ digit.repX(1)).!)
+  def num[_: P] = numStr.map(_.toInt)
+  def numL[_: P] = numStr.map(_.toLong)
   def alpha[_: P] = P(CharIn("a-zA-Z").!.map(_.head))
 
   def parseValue[Result](input: String, parser: P[_] => P[Result]): Result = {
