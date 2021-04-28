@@ -45,8 +45,8 @@ Day | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 |
 14  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/14.scala) |      |      |      | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2019/14.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2020/14.scala) |
 15  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/15.scala) |      |      |      |      |      |
 16  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/16.scala) |      |      |      |      |      |
-17  |      |      |      |      |      |      |
-18  |      |      |      |      |      |      |
+17  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/17.scala) |      |      |      |      |      |
+18  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/18.scala) |      |      |      |      |      |
 19  |      |      |      |      |      |      |
 20  |      |      |      |      |      |      |
 21  |      |      |      |      |      |      |
