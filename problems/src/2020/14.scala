@@ -21,8 +21,7 @@ object problem14 extends baseProblem {
     finalState.memory.values.sum
   }
 
-  private case class UniMask(orMask: Long, andMask: Long)
-  {
+  private case class UniMask(orMask: Long, andMask: Long) {
     def apply(v: Long): Long = (v | orMask) & andMask
   }
 
