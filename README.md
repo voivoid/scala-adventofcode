@@ -15,8 +15,8 @@ Build
 Tests
 -----
 
-    $ mill problems.test
-    $ mill -j 8 app.testAll
+    $ mill problems.test       # quick unit tests
+    $ mill -j 8 app.testAll    # test all problems
 
 Solve Problem
 -----
@@ -42,7 +42,7 @@ Day | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 |
 11  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/11.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2016/11.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2017/11.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2018/11.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2019/11.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2020/11.scala) |
 12  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/12.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2016/12.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2017/12.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2018/12.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2019/12.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2020/12.scala) |
 13  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/13.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2016/13.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2017/13.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2018/13.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2019/13.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2020/13.scala) |
-14  |      |      |      |      | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2019/14.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2020/14.scala) |
+14  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/14.scala) |      |      |      | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2019/14.scala) | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2020/14.scala) |
 15  |      |      |      |      |      |      |
 16  |      |      |      |      |      |      |
 17  |      |      |      |      |      |      |
