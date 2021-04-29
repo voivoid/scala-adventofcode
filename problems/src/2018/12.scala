@@ -51,7 +51,7 @@ object problem12 extends baseProblem {
   private def parseInitialGeneration(s: String): Generation = {
     val Array(_, genStr) = s.split(": ")
 
-    genStr.iterator.zipWithIndex.filter { case (pot, _) => pot == '#' }.map(_._2).to(TreeSet)
+    genStr.iterator.zipWithIndex.collect { case ('#', idx) => idx }.to(TreeSet)
   }
 
   private def parseRule(s: String): Rule = {
@@ -74,8 +74,7 @@ object problem12 extends baseProblem {
           (rulesMap.getOrElse(slideStr, '.'), idx + first + 2)
         }
       }
-      .filter { case (p, _) => p == '#' }
-      .map(_._2)
+      .collect { case ('#', idx) => idx }
       .to(TreeSet)
   }
 

@@ -38,9 +38,7 @@ object problem10 extends baseProblem {
       .getLines()
       .zipWithIndex
       .flatMap { case (line, y) =>
-        line.zipWithIndex.filter(_._1 == '#').map { case (_, x) =>
-          Point(x, y)
-        }
+        line.zipWithIndex.collect { case ('#', x) => Point(x, y) }
       }
       .toList
   }

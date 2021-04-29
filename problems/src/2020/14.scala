@@ -80,7 +80,7 @@ object problem14 extends baseProblem {
 
   private def genMaskCombinations(floatingMask: String): List[UniMask] = {
     val baseOrMask = java.lang.Long.parseLong(floatingMask.replace('X', '0'), 2)
-    val floatingBitIndices = floatingMask.reverseIterator.zipWithIndex.filter { case (c, _) => c == 'X' }.map(_._2).toList
+    val floatingBitIndices = floatingMask.reverseIterator.zipWithIndex.collect { case ('X', idx) => idx }.toList
 
     generateCombinations(floatingBitIndices).map { case UniMask(orMask, andMask) => UniMask(orMask | baseOrMask, andMask) }
   }

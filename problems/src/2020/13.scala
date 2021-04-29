@@ -17,7 +17,7 @@ object problem13 extends baseProblem {
     val lines = input.getLines()
     lines.next() // skip lines
 
-    val busIds = lines.next().split(',').zipWithIndex.filter { case (id, _) => id != "x" }.map { case (id, index) => (id.toLong, index) }
+    val busIds = lines.next().split(',').zipWithIndex.collect { case (id, index) if id != "x" => (id.toLong, index) }
 
     val r = busIds.foldLeft((0L, 1L)) { case ((step, mul), (busId, busIdx)) =>
       val i = Iterator.from(0).find(i => ((step + mul * i) + busIdx) % busId == 0).get

@@ -27,7 +27,7 @@ object problem19 extends baseProblem {
     val y = molecule.count(_ == 'Y')
 
     val molecules = molecule.count(_.isUpper)
-    if( rn + ar + y == 0) molecules else molecules - rn - ar - 2 * y - 1
+    if (rn + ar + y == 0) molecules else molecules - rn - ar - 2 * y - 1
   }
 
   private case class Substring(from: Int, len: Int)

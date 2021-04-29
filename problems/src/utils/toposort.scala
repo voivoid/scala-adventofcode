@@ -13,7 +13,7 @@ package object toposort {
     }
 
     val orderedNodesWithZeroParents =
-      parentCounterMap.iterator.filter(_._2 == 0).map { case (node, _) => node }.to(TreeSet)
+      parentCounterMap.iterator.collect { case (node, 0) => node }.to(TreeSet)
 
     List.unfold((orderedNodesWithZeroParents, parentCounterMap)) {
       case (noParentsNodes, parentCounterMap) if noParentsNodes.isEmpty => {
