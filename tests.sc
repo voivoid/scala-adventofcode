@@ -64,6 +64,11 @@ trait AppTests
     check(runProblem("2015_20_2")(), "705600")
   }
 
+  def test2015_21_25() = T.command {
+    check(runProblem("2015_21_1")(), "121")
+    check(runProblem("2015_21_2")(), "201")
+  }
+
   def test2016_1_10() = T.command {
     check(runProblem("2016_01_1")(), "273")
     check(runProblem("2016_01_2")(), "115")
@@ -303,6 +308,7 @@ trait AppTests
 
     test2020_1_10()()
     test2020_11_20()()
+    test2015_21_25()()
   }
 
   protected def runProblem(input: String): mill.define.Task[(mill.api.Logger, String, String)]

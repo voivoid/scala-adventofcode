@@ -49,7 +49,7 @@ Day | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 |
 18  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/18.scala) |      |      |      |      |      |
 19  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/19.scala) |      |      |      |      |      |
 20  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/20.scala) |      |      |      |      |      |
-21  |      |      |      |      |      |      |
+21  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/21.scala) |      |      |      |      |      |
 22  |      |      |      |      |      |      |
 23  |      |      |      |      |      |      |
 24  |      |      |      |      |      |      |
