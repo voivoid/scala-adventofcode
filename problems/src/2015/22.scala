@@ -16,30 +16,28 @@ object problem22 extends baseProblem {
     val player = Player(hp = 50, armor = 0, mana = 500)
     val initialState = State(player, boss, List.empty)
 
-    val spellLists = generateSpellLists(initialState, hardMode)
-    spellLists.iterator.map(calcSpellListMana).min
+    findMinMana(initialState, hardMode, 0, Int.MaxValue)
   }
 
-  private def generateSpellLists(state: State, hardMode: Boolean): List[List[Spell]] = {
-    if (state.boss.isDead) List(List())
+  private def findMinMana(state: State, hardMode: Boolean, currentMana:Int, minManaSoFar: Int): Int = {
+    if( currentMana >= minManaSoFar ) minManaSoFar
+    else if (state.boss.isDead) currentMana
     else {
       val s0 = if (!hardMode) state else state.decPlayerHp(1)
 
-      if (s0.player.isDead) Nil
+      if (s0.player.isDead) minManaSoFar
       else {
         val s1 = s0.applyActiveSpells
-        for {
-          currentSpell <- s1.availableSpells
-          restSpells <- {
+
+        s1.availableSpells.foldLeft(minManaSoFar){
+          case (accMinMana, currentSpell) => {
             val s2 = s1.runPlayerTurn(currentSpell).applyActiveSpells.runBossTurn
-            generateSpellLists(s2, hardMode)
+            accMinMana min findMinMana(s2, hardMode, currentMana + currentSpell.manaCost, accMinMana)
           }
-        } yield currentSpell :: restSpells
+        }
       }
     }
   }
-
-  private def calcSpellListMana(spellList: List[Spell]): Int = spellList.iterator.map(_.manaCost).sum
 
   private[problems] case class State(player: Player, boss: Boss, activeSpells: List[ActiveSpell]) {
     def applyActiveSpells: State = {
