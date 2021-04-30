@@ -22,25 +22,15 @@ object problem21 extends baseProblem {
   private def checkIfPlayerWinsTheGame(outfit: Outfit, boss: Fighter): Boolean = {
     val player = wearOutfit(outfit)
 
-    val (fighter1, fighter2) = Iterator.iterate((player, boss))(runTurn).find(isFightOver).get
-    val winnerName = if (fighter1.hitpoints > 0) fighter1.name else fighter2.name
+    val damageToBoss = 1 max (player.damage - boss.armor)
+    val damageToPlayer = 1 max (boss.damage - player.armor)
 
-    winnerName == PlayerName
-  }
+    def calcTurnsToKill(damage: Int, hitpoints: Int): Int = math.ceil(hitpoints.toDouble / damage).toInt
 
-  private def isFightOver(fighters: (Fighter, Fighter)): Boolean = {
-    fighters._1.hitpoints <= 0 || fighters._2.hitpoints <= 0
-  }
+    val turnsToKillBoss = calcTurnsToKill(damageToBoss, boss.hitpoints)
+    val turnsToKillPlayer = calcTurnsToKill(damageToPlayer, player.hitpoints)
 
-  private def runTurn(figthers: (Fighter, Fighter)): (Fighter, Fighter) = {
-    val (attacker, defender) = figthers
-
-    val hpDamage = 1 max (attacker.damage - defender.armor)
-
-    val nextAttacker = defender.copy(hitpoints = defender.hitpoints - hpDamage)
-    val nextDefender = attacker
-
-    (nextAttacker, nextDefender)
+    turnsToKillBoss <= turnsToKillPlayer
   }
 
   private case class Fighter(name: String, hitpoints: Int, damage: Int, armor: Int)
