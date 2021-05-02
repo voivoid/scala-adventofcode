@@ -53,4 +53,4 @@ Day | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 |
 22  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/22.scala) |      |      |      |      |      |
 23  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/23.scala) |      |      |      |      |      |
 24  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/24.scala) |      |      |      |      |      |
-25  |      |      |      |      |      |      |
+25  | [✓](https://github.com/voivoid/scala-adventofcode/blob/master/problems/src/2015/25.scala) |      |      |      |      |      |
