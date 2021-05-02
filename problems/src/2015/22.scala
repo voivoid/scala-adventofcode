@@ -19,8 +19,8 @@ object problem22 extends baseProblem {
     findMinMana(initialState, hardMode, 0, Int.MaxValue)
   }
 
-  private def findMinMana(state: State, hardMode: Boolean, currentMana:Int, minManaSoFar: Int): Int = {
-    if( currentMana >= minManaSoFar ) minManaSoFar
+  private def findMinMana(state: State, hardMode: Boolean, currentMana: Int, minManaSoFar: Int): Int = {
+    if (currentMana >= minManaSoFar) minManaSoFar
     else if (state.boss.isDead) currentMana
     else {
       val s0 = if (!hardMode) state else state.decPlayerHp(1)
@@ -29,7 +29,7 @@ object problem22 extends baseProblem {
       else {
         val s1 = s0.applyActiveSpells
 
-        s1.availableSpells.foldLeft(minManaSoFar){
+        s1.availableSpells.foldLeft(minManaSoFar) {
           case (accMinMana, currentSpell) => {
             val s2 = s1.runPlayerTurn(currentSpell).applyActiveSpells.runBossTurn
             accMinMana min findMinMana(s2, hardMode, currentMana + currentSpell.manaCost, accMinMana)
