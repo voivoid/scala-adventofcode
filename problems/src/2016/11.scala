@@ -38,7 +38,7 @@ object problem11 extends baseProblem {
   private case class State(currentFloor: FloorNum, devPairs: DevPairsSet)
 
   private def parseDevicePairs(input: Input): DevPairsSet = {
-    val floors = input.getLines().map(parseFloor).toList
+    val floors = input.getLines().map(parseFloor)
 
     val deviceFloorPairs = floors
       .map { case (floor, devices) => devices.map(_ -> floor) }

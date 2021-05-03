@@ -29,7 +29,7 @@ object problem10 extends baseProblem {
     case Nil      => (1, cache)
     case _ :: Nil => (1, cache)
     case j :: js => {
-      val compatibleJs = js.tails.takeWhile(_.headOption.exists(_ <= j + 3)).toList
+      val compatibleJs = js.tails.takeWhile(_.headOption.exists(_ <= j + 3))
       val (connections, updatedCache) = compatibleJs.foldLeft((0L, cache)) {
         case ((connsAcc, cacheAcc), tail) => {
           val cachedConns = cacheAcc.get(tail.head)
