@@ -34,6 +34,8 @@ package collections {
     def updateCurrent(a: A): Zipper[A] = make(left, a :: right.tail)
     def insert(a: A): Zipper[A] = make(left, a :: right)
 
+    def append(a: A): Zipper[A] = make(current :: left, a :: right.tail)
+
     def removeCurrent: Zipper[A] = {
       if (hasNext) make(left, right.tail)
       else {

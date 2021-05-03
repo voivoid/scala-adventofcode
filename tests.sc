@@ -169,11 +169,14 @@ trait AppTests
     check(runProblem("2017_14_1")(), "8140")
     check(runProblem("2017_14_2")(), "1182")
 
-    check(runProblem("2017_14_1")(), "631")
-    check(runProblem("2017_14_2")(), "279")
+    check(runProblem("2017_15_1")(), "631")
+    check(runProblem("2017_15_2")(), "279")
 
-    check(runProblem("2017_15_1")(), "iabmedjhclofgknp")
-    check(runProblem("2017_15_2")(), "oildcmfeajhbpngk")
+    check(runProblem("2017_16_1")(), "iabmedjhclofgknp")
+    check(runProblem("2017_16_2")(), "oildcmfeajhbpngk")
+
+    check(runProblem("2017_17_1")(), "640")
+    check(runProblem("2017_17_2")(), "47949463")
   }
 
   def test2018_1_10() = T.command {
