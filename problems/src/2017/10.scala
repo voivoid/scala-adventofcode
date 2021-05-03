@@ -3,73 +3,62 @@ package year2017
 
 object problem10 extends baseProblem {
 
-  import adventOfCode.utils.collections.{Zipper, CycledZipper}
-
   override def solve1(input: Input): Int = {
-    solve1(input, defaultNumsLen)
+    solve1(input, DefaultNumsLen)
   }
 
   def solve1(input: Input, numsLen: Int): Int = {
     import adventOfCode.utils.algorithms.IteratorSplit
 
     val lengths = input.splitBy(',').map(_.toInt).toList
-    val numsZippper = makeNumsZipper(numsLen)
+    val nums = makeNums(numsLen)
 
-    val resultNums = runRounds(lengths, numsZippper, 1)
+    val resultNums = runRounds(lengths, nums, 1)
     resultNums(0) * resultNums(1)
   }
 
   override def solve2(input: Input): String = {
-    val lengths = (input.iterator.map(_.toInt) ++ Iterator(17, 31, 73, 47, 23)).toList
-    val numsZippper = makeNumsZipper(defaultNumsLen)
+    val lengths = input.iterator.map(_.toInt).toList ::: List(17, 31, 73, 47, 23)
 
-    val sparseHash = runRounds(lengths, numsZippper, 64)
+    val sparseHash = runRounds(lengths, makeNums(DefaultNumsLen), 64)
     val denseHash = sparseHash.grouped(16).map(_.reduce(_ ^ _))
     val strHash = denseHash.map(num => f"$num%02x").mkString
 
     strHash
   }
 
-  private type NumsZipper = Zipper[Int]
-  private def defaultNumsLen = 255
-
-  private def makeNumsZipper(numsLen: Int): NumsZipper = {
-    CycledZipper((0 to numsLen).toList)
+  private type Nums = Vector[Int]
+  private def DefaultNumsLen = 255
+  private def makeNums(numsLen: Int): Nums = {
+    (0 to numsLen).toVector
   }
 
-  private def runRounds(lengths: List[Int], nums: NumsZipper, rounds: Int): List[Int] = {
+  private def runRounds(lengths: List[Int], nums: Nums, rounds: Int): Vector[Int] = {
     import adventOfCode.utils.algorithms.IteratorLast
 
-    val initialSkipSize = 0
+    val initialState = State(nums, 0, 0)
 
-    val (finalNums, _) = Iterator
-      .iterate((nums, initialSkipSize), rounds + 1) {
-        case (currentNums, currentSkip) => {
-          runRound(lengths, currentNums, currentSkip)
-        }
-      }
+    val finalState = Iterator
+      .iterate(initialState, rounds + 1)(runRound(lengths, _))
       .last
 
-    finalNums.list
+    finalState.nums
   }
+
+  private case class State(nums: Nums, skipSize: Int, currentPos: Int)
 
   @scala.annotation.tailrec
-  private def runRound(lengths: List[Int], nums: NumsZipper, skipSize: Int): (NumsZipper, Int) = lengths match {
-    case Nil => (nums, skipSize)
-    case l :: ls => {
-      runRound(ls, reverseLenElems(nums, l).next(skipSize), skipSize + 1)
-    }
-  }
+  private def runRound(lengths: List[Int], state: State): State = lengths match {
+    case Nil => state
+    case len :: ls => {
+      import state._
 
-  private def reverseLenElems(nums: NumsZipper, len: Int): NumsZipper = {
-    copyFromRightToLeft(nums, nums.next(len - 1), len)
-  }
+      val buff = nums.toBuffer
+      for (idx <- 0 until len) {
+        buff((currentPos + idx) % buff.size) = nums((currentPos + len - idx - 1) % buff.size)
+      }
 
-  @scala.annotation.tailrec
-  private def copyFromRightToLeft(numsLeft: NumsZipper, numsRight: NumsZipper, len: Int): NumsZipper = len match {
-    case 0 => numsLeft
-    case n => {
-      copyFromRightToLeft(numsLeft.updateCurrent(numsRight.current).next, numsRight.prev, n - 1)
+      runRound(ls, State(buff.toVector, skipSize + 1, currentPos + len + skipSize % nums.size))
     }
   }
 

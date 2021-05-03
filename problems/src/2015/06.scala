@@ -15,9 +15,7 @@ object problem06 extends baseProblem {
 
   private def solve(input: Input, lightFunction: Switch => (Light => Light)) = {
     val instructions = input.getLines().map(parseInstruction)
-    val initGrid = makeInitGrid
-
-    val finalGrid = instructions.foldLeft(initGrid)(runInstruction(_, _, lightFunction))
+    val finalGrid = instructions.foldLeft(makeInitGrid)(runInstruction(_, _, lightFunction))
 
     finalGrid.iterator.flatten.sum
   }
