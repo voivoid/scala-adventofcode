@@ -1,9 +1,11 @@
 package adventOfCode.problems
 package year2018
 
+import adventOfCode.utils.path.bearingLocDeltaYInv
+
 object problem13 extends baseProblem {
 
-  import adventOfCode.utils.path.{Bearing, Turn, bearingLocDelta, doTurn}
+  import adventOfCode.utils.path.{Bearing, Turn, doTurn}
   import adventOfCode.utils.geo.Point
   import scala.collection.immutable.TreeMap
 
@@ -110,8 +112,8 @@ object problem13 extends baseProblem {
       case _ => sys.error("unexpected track")
     }
 
-    val delta = bearingLocDelta(updatedCart.bearing, 1)
-    (coord + delta.copy(y = -delta.y), updatedCart)
+    val delta = bearingLocDeltaYInv(updatedCart.bearing, 1)
+    (coord + delta, updatedCart)
   }
 
   private def makeCartsMap(carts: Seq[(Char, Int)], width: Int): CartsMap = {

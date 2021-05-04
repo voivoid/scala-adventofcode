@@ -162,14 +162,19 @@ package object path {
     doTurn(currentDir, turn, 1)
   }
 
-  def bearingLocDelta(bearing: Bearing, distance: Int): Point[Int] = bearing match {
+  def bearingLocDelta(bearing: Bearing, distance: Int = 1): Point[Int] = bearing match {
     case Bearing.North => Point(0, distance)
     case Bearing.East  => Point(distance, 0)
     case Bearing.South => Point(0, -distance)
     case Bearing.West  => Point(-distance, 0)
   }
 
-  def dirLocDelta(dir: Dir, distance: Int): Point[Int] = {
+  def bearingLocDeltaYInv(bearing: Bearing, distance: Int = 1): Point[Int] = {
+    val delta = bearingLocDelta(bearing, distance)
+    delta.copy(y = -delta.y)
+  }
+
+  def dirLocDelta(dir: Dir, distance: Int = 1): Point[Int] = {
     val bearingFromDir = dir match {
       case Dir.Up    => Bearing.North
       case Dir.Right => Bearing.East
