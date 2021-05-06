@@ -8,12 +8,10 @@ object year2018_11 extends BaseTests {
   val tests = Tests {
     test("solve1 base cases") {
       problem.solve1("18") ==> "33,45"
-      problem.solve1("42") ==> "21,61"
     }
 
     test("solve2 base cases") {
       problem.solve2("18", 20) ==> "90,269,16"
-      problem.solve2("42", 20) ==> "232,251,12"
     }
 
     test("test impl") {

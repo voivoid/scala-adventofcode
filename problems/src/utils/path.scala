@@ -5,7 +5,7 @@ import adventOfCode.utils.geo.Point
 package path {
 
   object Turn extends scala.Enumeration {
-    val Left, Right, None = Value
+    val Left, Right, None, Reverse = Value
     type Turn = Value
   }
 
@@ -150,8 +150,11 @@ package object path {
   def doTurn(currentDir: Bearing, turn: Turn, turns: Int): Bearing = {
     if (turn == Turn.None) currentDir
     else {
-      val shift =
-        if (turn == Turn.Left) -turns else +turns
+      val shift = {
+        if (turn == Turn.Left) -turns
+        else if (turn == Turn.Right) +turns
+        else turns * 2
+      }
       val dirs = Bearing.values.size
 
       Bearing((currentDir.id + shift + dirs) % dirs)
