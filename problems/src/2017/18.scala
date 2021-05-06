@@ -7,10 +7,9 @@ object problem18 extends baseProblem {
 
   override def solve1(input: Input): Long = {
     val instructions = input.getLines().map(parseInstruction).toVector
-    val initialState = SerialState(Map.empty[RegId, RegVal].withDefaultValue(0L), 0, None, None)
 
     val firstRcv = Iterator
-      .iterate(initialState)(runSerialInstructions(instructions, _))
+      .iterate(makeInitialSerialState)(runSerialInstruction(instructions, _))
       .collectFirst { case state if state.lastRcv.isDefined => state.lastRcv.get }
       .get
 
@@ -25,52 +24,56 @@ object problem18 extends baseProblem {
     finalState.p1.sndCounter
   }
 
+  private[problems] def makeInitialSerialState: SerialState =
+    SerialState(Map.empty[RegId, RegVal].withDefaultValue(0L), 0, None, None)
+
   private def makeProgramState(prog: Long): ProgramState = {
     ProgramState(Map.empty[RegId, RegVal].withDefaultValue(0L).updated('p', prog), 0, Queue.empty[RegVal], 0)
   }
 
   private type IP = Int
-  private type RegId = Char
-  private type RegVal = Long
+  private[problems] type RegId = Char
+  private[problems] type RegVal = Long
   private type RegMap = Map[RegId, RegVal]
 
-  private case class SerialState(regMap: RegMap, ip: IP, lastSnd: Option[RegVal], lastRcv: Option[RegVal])
+  private[problems] case class SerialState(regMap: RegMap, ip: IP, lastSnd: Option[RegVal], lastRcv: Option[RegVal])
   private case class ProgramState(regMap: RegMap, ip: IP, out: Queue[RegVal], sndCounter: Int)
   private case class ParallelState(p0: ProgramState, p1: ProgramState)
 
-  private sealed trait Source
-  private case class Reg(r: RegId) extends Source
-  private case class Value(v: RegVal) extends Source
+  private[problems] sealed trait Source
+  private[problems] case class Reg(name: RegId) extends Source
+  private[problems] case class Value(v: RegVal) extends Source
 
-  private sealed trait Instruction
-  private case class Snd(x: Source) extends Instruction
-  private case class Rcv(xR: Reg) extends Instruction
-  private case class Set(xR: Reg, y: Source) extends Instruction
-  private case class Add(xR: Reg, y: Source) extends Instruction
-  private case class Mul(xR: Reg, y: Source) extends Instruction
-  private case class Mod(xR: Reg, y: Source) extends Instruction
-  private case class Jgz(x: Source, y: Source) extends Instruction
+  private[problems] sealed trait Instruction
+  private[problems] case class Snd(x: Source) extends Instruction
+  private[problems] case class Rcv(xR: Reg) extends Instruction
+  private[problems] case class Set(xR: Reg, y: Source) extends Instruction
+  private[problems] case class Add(xR: Reg, y: Source) extends Instruction
+  private[problems] case class Sub(xR: Reg, y: Source) extends Instruction
+  private[problems] case class Mul(xR: Reg, y: Source) extends Instruction
+  private[problems] case class Mod(xR: Reg, y: Source) extends Instruction
+  private[problems] case class Jgz(x: Source, y: Source) extends Instruction
+  private[problems] case class Jnz(x: Source, y: Source) extends Instruction
 
   private type Instructions = Vector[Instruction]
 
-  private def runSerialInstructions(instructions: Instructions, state: SerialState): SerialState = {
+  private[problems] def runSerialInstruction(instructions: Instructions, state: SerialState): SerialState = {
     if (!instructions.indices.contains(state.ip)) state
     else {
-      val (ipOffset, nextState) = runInstruction(instructions(state.ip), state)
+      val instruction = instructions(state.ip)
+      val (ipOffset, nextState) = instruction match {
+        case Snd(x) => (1, state.copy(lastSnd = Some(readSource(x, state.regMap))))
+        case Rcv(x) => {
+          if (readSource(x, state.regMap) == 0) (1, state)
+          else (1, state.copy(lastRcv = state.lastSnd))
+        }
+
+        case basicInstruction => {
+          val (ipOffset, nextRegMap) = runBasicInstuction(basicInstruction, state.regMap)
+          (ipOffset, state.copy(regMap = nextRegMap))
+        }
+      }
       nextState.copy(ip = nextState.ip + ipOffset)
-    }
-  }
-
-  private def runInstruction(instruction: Instruction, state: SerialState): (Int, SerialState) = instruction match {
-    case Snd(x) => (1, state.copy(lastSnd = Some(readSource(x, state.regMap))))
-    case Rcv(x) => {
-      if (readSource(x, state.regMap) == 0) (1, state)
-      else (1, state.copy(lastRcv = state.lastSnd))
-    }
-
-    case basicInstruction => {
-      val (ipOffset, nextRegMap) = runBasicInstuction(basicInstruction, state.regMap)
-      (ipOffset, state.copy(regMap = nextRegMap))
     }
   }
 
@@ -78,15 +81,20 @@ object problem18 extends baseProblem {
     val read = readSource(_, regMap)
 
     def upd(xR: Reg, y: Source, f: (Long, Long) => Long) =
-      (1, regMap.updated(xR.r, f(read(xR), read(y))))
+      (1, regMap.updated(xR.name, f(read(xR), read(y))))
 
     instruction match {
       case Jgz(x, y) => {
-        if (readSource(x, regMap) > 0) (read(y).toInt, regMap)
+        if (read(x) > 0) (read(y).toInt, regMap)
+        else (1, regMap)
+      }
+      case Jnz(x, y) => {
+        if (read(x) != 0) (read(y).toInt, regMap)
         else (1, regMap)
       }
       case Set(xR, y) => upd(xR, y, (_, v) => v)
       case Add(xR, y) => upd(xR, y, _ + _)
+      case Sub(xR, y) => upd(xR, y, _ - _)
       case Mul(xR, y) => upd(xR, y, _ * _)
       case Mod(xR, y) => upd(xR, y, _ % _)
       case _          => sys.error("unexpected")
@@ -114,12 +122,12 @@ object problem18 extends baseProblem {
       case (_, _) => {
         val nextP0 = i0 match {
           case _: Rcv => state.p0
-          case _      => runInstruction(i0, state.p0)
+          case _      => runParallelInstruction(i0, state.p0)
         }
 
         val nextP1 = i1 match {
           case _: Rcv => state.p1
-          case _      => runInstruction(i1, state.p1)
+          case _      => runParallelInstruction(i1, state.p1)
         }
 
         (false, ParallelState(nextP0, nextP1))
@@ -137,10 +145,10 @@ object problem18 extends baseProblem {
     queueProgram: ProgramState
   ): (ProgramState, ProgramState) = {
     val (receivedValue, nextQueue) = queue.dequeue
-    (runInstruction(Set(regToUpdate, Value(receivedValue)), regProgram), queueProgram.copy(out = nextQueue))
+    (runParallelInstruction(Set(regToUpdate, Value(receivedValue)), regProgram), queueProgram.copy(out = nextQueue))
   }
 
-  private def runInstruction(instruction: Instruction, state: ProgramState): ProgramState = {
+  private def runParallelInstruction(instruction: Instruction, state: ProgramState): ProgramState = {
     instruction match {
       case Snd(x) => {
         val v = readSource(x, state.regMap)
@@ -158,7 +166,7 @@ object problem18 extends baseProblem {
     case Reg(r)   => regMap(r)
   }
 
-  private def parseInstruction(s: String): Instruction = {
+  private[problems] def parseInstruction(s: String): Instruction = {
     import fastparse._
     import fastparse.SingleLineWhitespace._
     import adventOfCode.utils.parse.{parseValue, numL, alpha}
@@ -170,12 +178,14 @@ object problem18 extends baseProblem {
     def snd[_: P] = P("snd" ~ source).map(Snd)
     def rcv[_: P] = P("rcv" ~ reg).map(Rcv)
     def set[_: P] = P("set" ~ reg ~ source).map(Set tupled _)
+    def sub[_: P] = P("sub" ~ reg ~ source).map(Sub tupled _)
     def add[_: P] = P("add" ~ reg ~ source).map(Add tupled _)
     def mul[_: P] = P("mul" ~ reg ~ source).map(Mul tupled _)
     def mod[_: P] = P("mod" ~ reg ~ source).map(Mod tupled _)
     def jgz[_: P] = P("jgz" ~ source ~ source).map(Jgz tupled _)
+    def jnz[_: P] = P("jnz" ~ source ~ source).map(Jnz tupled _)
 
-    def parser[_: P] = P(snd | set | add | mul | mod | rcv | jgz)
+    def parser[_: P] = P(snd | set | sub | add | mul | mod | rcv | jgz | jnz)
 
     parseValue(s, parser(_))
   }
