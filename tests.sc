@@ -197,6 +197,9 @@ trait AppTests
 
     check(runProblem("2017_23_1")(), "5929")
     check(runProblem("2017_23_2")(), "907")
+
+    check(runProblem("2017_24_1")(), "1511")
+    check(runProblem("2017_24_2")(), "1471")
   }
 
 
