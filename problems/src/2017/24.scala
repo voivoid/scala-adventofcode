@@ -13,18 +13,17 @@ object problem24 extends baseProblem {
     findLongestAndStrongestBridge(input)
   }
 
-  private def findLongestAndStrongestBridge(input: Input): Int = findMaxLenAndStr(input, lenInc=1)
+  private def findLongestAndStrongestBridge(input: Input): Int = findMaxLenAndStr(input, lenInc = 1)
 
   private def findStrongestBridge(input: Input): Int = {
     // Since lenInc is 0 all bridges total lengths will be 0.
     // This will cause the algorithm to basically ignore the length and to compare only the strength.
-    findMaxLenAndStr(input, lenInc=0)
+    findMaxLenAndStr(input, lenInc = 0)
   }
-
 
   private def findMaxLenAndStr(input: Input, lenInc: Int): Int = {
     val componentsMap = parseComponentsMap(input)
-    val (maxLen@_, maxStrength) = findLongestAndStrongestBridges(0, 0, 0, componentsMap, lenInc)
+    val (maxLen @ _, maxStrength) = findLongestAndStrongestBridges(0, 0, 0, componentsMap, lenInc)
 
     maxStrength
   }
@@ -33,8 +32,10 @@ object problem24 extends baseProblem {
     val matched = componentsMap.get(from)
     if (matched.isEmpty) (len, strength)
     else {
-      matched
-        .map(to => findLongestAndStrongestBridges(to, len + lenInc, strength + from + to, componentsMap - (from -> to) - (to -> from), lenInc))
+      matched.iterator
+        .map(to =>
+          findLongestAndStrongestBridges(to, len + lenInc, strength + from + to, componentsMap - (from -> to) - (to -> from), lenInc)
+        )
         .max
     }
   }

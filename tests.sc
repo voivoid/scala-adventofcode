@@ -200,9 +200,10 @@ trait AppTests
 
     check(runProblem("2017_24_1")(), "1511")
     check(runProblem("2017_24_2")(), "1471")
+
+    check(runProblem("2017_25_1")(), "633")
+    check(runProblem("2017_25_2")(), "0")
   }
-
-
 
   def test2018_1_10() = T.command {
     check(runProblem("2018_01_1")(), "411")
