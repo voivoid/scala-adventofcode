@@ -55,7 +55,7 @@ object problem12 extends baseProblem {
 
   private def runAction(state: BearingState, action: Action): BearingState = action match {
     case Forward(n) => {
-      val delta = path.bearingLocDelta(state.bearing, n)
+      val delta = path.bearingLocDeltaYInv(state.bearing, n)
       state.copy(shipCoord = state.shipCoord + delta)
     }
     case Turn(turnDir, degree) => {
@@ -64,7 +64,7 @@ object problem12 extends baseProblem {
     }
 
     case Move(bearing, distance) => {
-      val delta = path.bearingLocDelta(bearing, distance)
+      val delta = path.bearingLocDeltaYInv(bearing, distance)
       state.copy(shipCoord = state.shipCoord + delta)
     }
   }
@@ -82,7 +82,7 @@ object problem12 extends baseProblem {
     }
 
     case Move(bearing, distance) => {
-      val delta = path.bearingLocDelta(bearing, distance)
+      val delta = path.bearingLocDeltaYInv(bearing, distance)
       state.copy(waypointCoord = state.waypointCoord + delta)
     }
   }

@@ -166,9 +166,9 @@ package object path {
   }
 
   def bearingLocDelta(bearing: Bearing, distance: Int = 1): Point[Int] = bearing match {
-    case Bearing.North => Point(0, distance)
+    case Bearing.North => Point(0, -distance)
     case Bearing.East  => Point(distance, 0)
-    case Bearing.South => Point(0, -distance)
+    case Bearing.South => Point(0, distance)
     case Bearing.West  => Point(-distance, 0)
   }
 

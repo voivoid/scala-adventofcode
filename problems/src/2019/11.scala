@@ -1,12 +1,10 @@
 package adventOfCode.problems
 package year2019
 
-import adventOfCode.utils.path.doTurn
-
 object problem11 extends baseProblem {
 
   import adventOfCode.utils.intcode._
-  import adventOfCode.utils.path.{Bearing, Turn, bearingLocDelta}
+  import adventOfCode.utils.path.{Bearing, Turn, bearingLocDeltaYInv, doTurn}
   import adventOfCode.utils.geo.Point
 
   override def solve1(input: Input): Int = {
@@ -76,7 +74,7 @@ object problem11 extends baseProblem {
     val nextBearing = doTurn(bearing, makeTurn(turnCode))
     val nextPaintedMap = paintedMap.updated(coord, colorToPaint.toInt)
 
-    val nextCoord = coord + bearingLocDelta(nextBearing, 1)
+    val nextCoord = coord + bearingLocDeltaYInv(nextBearing, 1)
 
     State(nextMachine, nextBearing, nextCoord, nextPaintedMap)
   }

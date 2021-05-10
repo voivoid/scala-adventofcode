@@ -1,7 +1,7 @@
 package adventOfCode.problems
 package year2017
 
-import adventOfCode.utils.path.bearingLocDeltaYInv
+import adventOfCode.utils.path.bearingLocDelta
 
 object problem19 extends baseProblem {
 
@@ -41,14 +41,14 @@ object problem19 extends baseProblem {
 
     val line = getGridLine(grid, loc)
     if (line != CrossLine) {
-      val nextLoc = loc + bearingLocDeltaYInv(bearing, 1)
+      val nextLoc = loc + bearingLocDelta(bearing, 1)
       copy(loc = nextLoc)
     } else {
       val leftTurnBearing = doTurn(state.bearing, Turn.Left)
       val rightTurnBearing = doTurn(state.bearing, Turn.Right)
 
-      val leftTurnLoc = loc + bearingLocDeltaYInv(leftTurnBearing)
-      val rightTurnLoc = loc + bearingLocDeltaYInv(rightTurnBearing)
+      val leftTurnLoc = loc + bearingLocDelta(leftTurnBearing)
+      val rightTurnLoc = loc + bearingLocDelta(rightTurnBearing)
 
       if (isValidBearing(leftTurnBearing, getGridLine(grid, leftTurnLoc))) {
         State(leftTurnLoc, leftTurnBearing)

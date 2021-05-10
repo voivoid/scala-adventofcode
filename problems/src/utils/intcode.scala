@@ -13,6 +13,11 @@ package object intcode {
     source.splitBy(',').map(_.toLong).toVector
   }
 
+  def parseMemory(s: String): Memory = {
+    import adventOfCode.utils.algorithms.IteratorSplit
+    s.iterator.splitBy(',').map(_.toLong).toVector
+  }
+
   def run(memory: Memory, input: In = List.empty): Machine = {
     val finalState = runMachine(makeMachine(memory, input))
     finalState

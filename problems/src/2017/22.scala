@@ -4,7 +4,7 @@ package year2017
 object problem22 extends baseProblem {
 
   import adventOfCode.utils.geo.Point
-  import adventOfCode.utils.path.{Bearing, bearingLocDeltaYInv, Turn, doTurn}
+  import adventOfCode.utils.path.{Bearing, bearingLocDelta, Turn, doTurn}
 
   override def solve1(input: Input): Int = {
     solve1(input, 10000)
@@ -59,7 +59,7 @@ object problem22 extends baseProblem {
     }
 
     val (nextGrid, nextLoc) = {
-      val nextLoc = currentLoc + bearingLocDeltaYInv(nextBearing)
+      val nextLoc = currentLoc + bearingLocDelta(nextBearing)
       if (shouldInflate(grid, nextLoc)) inflate(grid, nextLoc)
       else (grid, nextLoc)
     }

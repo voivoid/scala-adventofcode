@@ -12,7 +12,7 @@ object problem16 extends baseProblem {
     val phaseIterations = phases + 1
 
     import adventOfCode.utils.algorithms.IteratorLast
-    val finalDigits = Iterator.iterate(digits, phaseIterations)( runPhase ).last
+    val finalDigits = Iterator.iterate(digits, phaseIterations)(runPhase).last
 
     finalDigits.take(8).mkString
   }
@@ -40,11 +40,11 @@ object problem16 extends baseProblem {
 
   @scala.annotation.tailrec
   private def runP2Phases(digits: List[Int], phasesLeft: Int): List[Int] = {
-    if(phasesLeft == 0) digits
+    if (phasesLeft == 0) digits
     else {
-      val nextPhase = digits.foldRight(List.empty[Int]){
-        case (e, Nil) => List(crop(e))
-        case (e, acc@(x :: _)) => crop(e + x) :: acc
+      val nextPhase = digits.foldRight(List.empty[Int]) {
+        case (e, Nil)            => List(crop(e))
+        case (e, acc @ (x :: _)) => crop(e + x) :: acc
       }
 
       runP2Phases(nextPhase, phasesLeft - 1)
@@ -53,19 +53,21 @@ object problem16 extends baseProblem {
 
   private type Digits = Vector[Int]
   private def runPhase(digits: Digits): Digits = {
-    digits.indices.map(dIndex => {
-      val sum = digits.iterator.zipWithIndex.map{ case (d,i) => d * calcMul(dIndex, i) }.sum
-      crop(sum)
-    }).toVector
+    digits.indices
+      .map(dIndex => {
+        val sum = digits.iterator.zipWithIndex.map { case (d, i) => d * calcMul(dIndex, i) }.sum
+        crop(sum)
+      })
+      .toVector
   }
 
   private def crop(n: Int): Int = n.abs % 10
 
   private def calcMul(dIndex: Int, i: Int): Int = {
-    val n = ((i + 1) / (dIndex+1)) % 4
+    val n = ((i + 1) / (dIndex + 1)) % 4
 
-    if( n == 1 ) 1
-    else if( n == 3 ) -1
+    if (n == 1) 1
+    else if (n == 3) -1
     else 0
   }
 

@@ -1,7 +1,7 @@
 package adventOfCode.problems
 package year2018
 
-import adventOfCode.utils.path.bearingLocDeltaYInv
+import adventOfCode.utils.path.bearingLocDelta
 
 object problem13 extends baseProblem {
 
@@ -112,7 +112,7 @@ object problem13 extends baseProblem {
       case _ => sys.error("unexpected track")
     }
 
-    val delta = bearingLocDeltaYInv(updatedCart.bearing, 1)
+    val delta = bearingLocDelta(updatedCart.bearing, 1)
     (coord + delta, updatedCart)
   }
 
