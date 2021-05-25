@@ -88,7 +88,7 @@ object problem07 extends baseProblem {
   }
 
   private def makeTopToBottomNamesMap(towers: IterableOnce[Tower]): TopToBottomNamesMap = {
-    towers.iterator.foldLeft(Map.empty[Name, Name]) {
+    towers.iterator.foldLeft(Map.empty: TopToBottomNamesMap) {
       case (map, Tower(name, _, subtowers, _)) if !subtowers.isEmpty => {
         map ++ subtowers.map(_ -> name)
       }
@@ -97,7 +97,7 @@ object problem07 extends baseProblem {
   }
 
   private def makeBottomToTopTowersMap(towers: IterableOnce[Tower]): BottomToTopTowersMap = {
-    towers.iterator.foldLeft(Map.empty[Name, Tower]) {
+    towers.iterator.foldLeft(Map.empty: BottomToTopTowersMap) {
       case (map, tower @ Tower(name, _, _, _)) => {
         map + (name -> tower)
       }

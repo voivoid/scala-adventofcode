@@ -15,7 +15,7 @@ object problem08 extends baseProblem {
     val instructions = input.getLines().map(parseInstruction)
 
     val initRegValue = 0
-    val initRegMap = Map.empty[Reg, Int].withDefaultValue(initRegValue)
+    val initRegMap = Map.empty[Reg, RegValue].withDefaultValue(initRegValue)
 
     instructions.foldLeft(RunResult(initRegValue, initRegMap)) { case (RunResult(maxRegVal, regMap), instruction) =>
       runInstruction(maxRegVal, regMap, instruction)

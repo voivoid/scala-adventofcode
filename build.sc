@@ -2,7 +2,7 @@ import mill._, scalalib._, scalafmt._
 import $file.tests
 
 object problems extends ScalaModule with ScalafmtModule {
-  override def scalaVersion = "2.13.5"
+  override def scalaVersion = "2.13.6"
   override def scalacOptions = scalaOpts
   override def ivyDeps = Agg(
     ivy"com.lihaoyi::fastparse:2.3.2",
@@ -15,8 +15,8 @@ object problems extends ScalaModule with ScalafmtModule {
   object test extends Tests with ScalafmtModule {
     override def scalaVersion = problems.scalaVersion
     override def moduleDeps = Seq(problems)
-    override def ivyDeps = Agg(ivy"com.lihaoyi::utest:0.7.7")
-    override def testFrameworks = Seq("utest.runner.Framework")
+    override def ivyDeps = Agg(ivy"com.lihaoyi::utest:0.7.10")
+    override def testFramework = "utest.runner.Framework"
   }
 
   object bench extends ScalaModule with ScalafmtModule {
@@ -30,7 +30,6 @@ object problems extends ScalaModule with ScalafmtModule {
 object app extends ScalaModule with ScalafmtModule with tests.AppTests {
   override def scalaVersion = problems.scalaVersion
   override def moduleDeps = Seq(problems)
-  override def ivyDeps = Agg(ivy"org.scala-lang:scala-reflect:${scalaVersion()}")
 
   override protected def runProblem(input: String) = T.task {
     val Array(year, problem, part) = input.split('_')

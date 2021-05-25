@@ -58,7 +58,7 @@ object problem07 extends baseProblem {
       }
     }
 
-    bags.foldLeft(Map.empty[Color, Set[Color]])(insertBagColors)
+    bags.foldLeft(Map.empty: ColorMap)(insertBagColors)
   }
 
   private def makeColorToContentMap(bags: Iterator[BagInfo]): ContentMap = {
