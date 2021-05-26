@@ -54,7 +54,7 @@ package object intcode {
   }
 
   private def decodeOp(machine: Machine): Op = {
-    val currentOpCode = machine.getCurrentOp % 100
+    val currentOpCode = machine.getCurrentOpCode
     Ops.find(_.codeId == currentOpCode).getOrElse(sys.error("unexpected opcode"))
   }
 
@@ -64,6 +64,7 @@ package object intcode {
 package intcode {
   case class Machine(memory: Memory, extraMem: Map[Code, Code], instructionPointer: IP, input: In, output: Out, relativeBase: Code) {
     def getCurrentOp = readMem(instructionPointer)
+    def getCurrentOpCode = getCurrentOp % 100
     def getOpArg(argN: Int): Code = {
       getParameterMode(argN) match {
         case 0 => readMem(instructionPointer + argN) // position mode
@@ -97,8 +98,8 @@ package intcode {
       }
     }
 
-    def waitsForInput: Boolean = getCurrentOp == InputOp.codeId
-    def halted: Boolean = getCurrentOp == HaltOp.codeId
+    def waitsForInput: Boolean = getCurrentOpCode == InputOp.codeId
+    def halted: Boolean = getCurrentOpCode == HaltOp.codeId
   }
 
   trait Op {

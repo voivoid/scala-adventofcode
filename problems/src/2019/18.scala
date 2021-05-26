@@ -46,9 +46,8 @@ object problem18 extends baseProblem {
 
   private type GridGraph = Map[Tile, AvailableTiles]
 
-
   private def calcMinSteps(initialStates: StateMap, gridGraph: GridGraph): StepsNum = {
-    val statesIter = Iterator.iterate((initialStates, Int.MaxValue)){
+    val statesIter = Iterator.iterate((initialStates, Int.MaxValue)) {
       case (states: StateMap, minSteps: StepsNum) => {
         states.foldLeft((Map.empty: StateMap, minSteps)) {
           case ((statesAcc, minStepsAcc), (state, stepsSoFar)) => {
@@ -69,7 +68,7 @@ object problem18 extends baseProblem {
       }
     }
 
-    statesIter.collectFirst{ case (states, stepsNum) if states.isEmpty => stepsNum }.get
+    statesIter.collectFirst { case (states, stepsNum) if states.isEmpty => stepsNum }.get
   }
 
   private def mergeStates(states: StateMap, state: State, availableKeys: Vector[(NextTile, Int)]): StateMap = {
