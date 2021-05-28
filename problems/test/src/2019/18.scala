@@ -69,7 +69,7 @@ object year2019_18 extends BaseTests {
       problem.solve1(input1) ==> 8
       problem.solve1(input2) ==> 86
       problem.solve1(input3) ==> 132
-      //problem.solve1(input4) ==> 136
+      //problem.solve1(input4) ==> 136 // optimize performance
       problem.solve1(input5) ==> 81
     }
 

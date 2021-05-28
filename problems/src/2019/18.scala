@@ -46,7 +46,7 @@ object problem18 extends baseProblem {
 
   private type GridGraph = Map[Tile, AvailableTiles]
 
-  private def calcMinSteps(initialStates: StateMap, gridGraph: GridGraph): StepsNum = {
+  private def calcMinSteps(initialStates: StateMap, gridGraph: GridGraph): StepsNum = { // TODO: improve performance
     val statesIter = Iterator.iterate((initialStates, Int.MaxValue)) {
       case (states: StateMap, minSteps: StepsNum) => {
         states.foldLeft((Map.empty: StateMap, minSteps)) {

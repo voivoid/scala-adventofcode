@@ -52,7 +52,6 @@ object problem21 extends baseProblem {
   private def BossName = "BOSS"
   private def PlayerName = "PLAYER"
 
-  // format off
   private def weaponList = List(
     Item("Dagger", 8, 4, 0),
     Item("Shortsword", 10, 5, 0),
@@ -80,7 +79,6 @@ object problem21 extends baseProblem {
     Item("Defense +2", 40, 0, 2),
     Item("Defense +3", 80, 0, 3)
   )
-  // format on
 
   private type Outfit = List[Item]
   private def generateOutfits(): List[Outfit] = {
