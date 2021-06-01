@@ -29,11 +29,15 @@ package object intcode {
 
   def resumeMachine(machine: Machine, input: In): Machine = {
     assert(machine.waitsForInput)
-    runMachine(machine.copy(input = machine.input ++ input))
+    runMachine(machine.copy(input = machine.input ::: input))
   }
 
   def resetOutput(machine: Machine): Machine = {
     machine.copy(output = List.empty)
+  }
+
+  def addInput(machine: Machine, input: In): Machine = {
+    machine.copy(input = machine.input ::: input)
   }
 
   def runMachine(machine: Machine): Machine = {
@@ -49,7 +53,7 @@ package object intcode {
     finalStates._1
   }
 
-  private def calcNextState(machine: Machine): Machine = {
+  def calcNextState(machine: Machine): Machine = {
     decodeOp(machine).run(machine)
   }
 
